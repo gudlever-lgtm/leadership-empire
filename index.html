@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#124a49" />
+  <title>Leadership Empire — Prototype</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand"><span class="crown">♛</span><div><strong>LEADERSHIP</strong><b>EMPIRE</b></div></div>
+      <div class="metrics" id="metrics" aria-live="polite"></div>
+      <button id="reset" class="icon-btn" title="Start forfra" aria-label="Start forfra">↻</button>
+    </header>
+    <main>
+      <section class="intro"><div><span class="eyebrow">CAREER MODE · DAG <span id="day">1</span> AF 100</span><h1 id="page-title">Din nye afdeling</h1><p id="subtitle">12 medarbejdere · IT & Infrastruktur · En afdeling, der har brug for ledelse</p></div><div class="intro-actions"><button id="advance" class="btn secondary">Næste dag →</button><button id="academy-toggle" class="btn primary">🎓 Leadership Academy</button></div></section>
+      <div class="layout">
+        <section class="office-wrap" aria-label="Interaktivt kontormiljø">
+          <div class="scene-header"><div><strong>🏢 IT & Infrastruktur</strong><span>Tryk på en medarbejder for at se profilen</span></div><span class="status-pill">● Afdelingen er åben</span></div>
+          <div class="office" id="office">
+            <div class="zone meeting"><span class="zone-name">MØDERUM</span><div class="meeting-table"></div><div class="chair c1"></div><div class="chair c2"></div><div class="chair c3"></div></div>
+            <div class="zone coffee"><span class="zone-name">KAFFE & SAMARBEJDE</span><div class="sofa">▰</div><div class="coffee-table">☕</div><div class="plant">🌿</div></div>
+            <div class="zone work"><span class="zone-name">ARBEJDSOMRÅDE</span><div class="desks"><div class="desk">💻</div><div class="desk">💻</div><div class="desk">💻</div><div class="desk">💻</div><div class="desk">💻</div><div class="desk">💻</div></div></div>
+            <div class="characters" id="characters"></div>
+          </div>
+          <div class="scene-footer"><span>💡 Klik på en figur eller vælg "Beslutninger" nederst</span><span id="activity">Aktiv situation: Den stærke specialist</span></div>
+        </section>
+        <aside class="sidepanel" id="panel" aria-live="polite"></aside>
+      </div>
+    </main>
+    <nav class="bottom-nav" aria-label="Hovedmenu">
+      <button class="nav active" data-view="organisation">🏢<span>Organisation</span></button>
+      <button class="nav" data-view="people">👥<span>Medarbejdere</span></button>
+      <button class="nav" data-view="decisions">⚖️<span>Beslutninger</span></button>
+      <button class="nav" data-view="insights">📊<span>Indsigt</span></button>
+      <button class="nav" data-view="academy">🎓<span>Academy</span></button>
+    </nav>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
