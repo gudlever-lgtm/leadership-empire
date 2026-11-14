@@ -243,7 +243,7 @@ test('Windows APK target and standalone website card are configured',()=>{
  const root=new URL('../',import.meta.url);
  const build=readFileSync(new URL('build-android.ps1',root),'utf8');
  const card=readFileSync(new URL('deploy/dulmens-leadership-card.html',root),'utf8');
- assert.match(build,/C:\\Users\\osoman\\Downloads/);
+ assert.match(build,/C:\\Users\\osoma\\Downloads/);
  assert.match(build,/leader\.apk/);
  assert.match(build,/copiedChecksum/);
  for(const name of ['leader.apk','leader-logo.svg','leader-qr.svg'])assert.ok(card.includes('/downloads/'+name));

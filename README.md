@@ -138,13 +138,13 @@ Alternativt kan den manuelle GitHub Actions-workflow **Android debug build** kø
 
 ### Windows-download og dulmens.dk
 
-Ved en vellykket `-Platform apk`-build kopieres APK'en automatisk til `C:\Users\osoman\Downloads\leader.apk`. Scriptet sammenligner SHA-256 før og efter kopieringen og stopper med fejl ved manglende downloadmappe. `-Platform aab` påvirkes ikke.
+Ved en vellykket `-Platform apk`-build kopieres APK'en automatisk til `C:\Users\osoma\Downloads\leader.apk`. Scriptet sammenligner SHA-256 før og efter kopieringen og stopper med fejl ved manglende downloadmappe. `-Platform aab` påvirkes ikke.
 
 Website-skabelonen ligger i `deploy/dulmens-leadership-card.html`. Indsæt HTML-blokken i spilsektionen på `/var/www/dulmens.dk/index.html` uden at erstatte de andre spil. Kopiér disse filer til serveren:
 
 | Lokal kilde | Serverdestination |
 |---|---|
-| `C:\Users\osoman\Downloads\leader.apk` | `/var/www/dulmens.dk/downloads/leader.apk` |
+| `C:\Users\osoma\Downloads\leader.apk` | `/var/www/dulmens.dk/downloads/leader.apk` |
 | `assets/leadership-icon.svg` | `/var/www/dulmens.dk/downloads/leader-logo.svg` |
 | `assets/leader-qr.svg` | `/var/www/dulmens.dk/downloads/leader-qr.svg` |
 

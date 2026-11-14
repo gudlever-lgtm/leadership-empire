@@ -62,7 +62,7 @@ try {
     Write-Host ("Size: {0:N2} MB" -f ($file.Length / 1MB))
     Write-Host "SHA256: $checksum"
     if ($Platform -eq 'apk') {
-        $downloads = 'C:\Users\osoman\Downloads'
+        $downloads = 'C:\Users\osoma\Downloads'
         if (-not (Test-Path -LiteralPath $downloads -PathType Container)) {
             throw "Download-mappen blev ikke fundet: $downloads"
         }
