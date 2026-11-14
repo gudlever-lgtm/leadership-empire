@@ -249,3 +249,17 @@ test('Windows APK target and standalone website card are configured',()=>{
  for(const name of ['leader.apk','leader-logo.svg','leader-qr.svg'])assert.ok(card.includes('/downloads/'+name));
  assert.ok(existsSync(new URL('assets/leader-qr.svg',root)));
 });
+
+test('premium logo and four-column website download page are bundled',()=>{
+ const root=new URL('../',import.meta.url);
+ const html=readFileSync(new URL('index.html',root),'utf8');
+ const homepage=readFileSync(new URL('deploy/dulmens-index-v2.html',root),'utf8');
+ const manifest=JSON.parse(readFileSync(new URL('manifest.webmanifest',root),'utf8'));
+ assert.ok(existsSync(new URL('assets/leadership-logo-v2.png',root)));
+ assert.ok(existsSync(new URL('assets/leadership-icon-v2.png',root)));
+ assert.match(html,/leadership-logo-v2\.png/);
+ assert.match(homepage,/repeat\(4,minmax\(0,1fr\)\)/);
+ assert.match(homepage,/leader-logo\.png/);
+ assert.equal((homepage.match(/<article class="card"/g)||[]).length,4);
+ assert.ok(manifest.icons.some(icon=>icon.src==='assets/leadership-icon-v2.png'));
+});

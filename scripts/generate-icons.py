@@ -1,23 +1,16 @@
-"""Regenerate PWA/Android PNG icons from the canonical Leadership Empire SVG.
+"""Regenerate scaled PWA/Android icons from the approved game artwork.
 
-Requires Inkscape CLI only when the artwork changes. Generated PNGs are committed,
-so normal web and Android builds do not need Inkscape.
+Requires Pillow only when the artwork changes. Generated PNGs are committed.
 """
 from pathlib import Path
-import shutil
-import subprocess
+from PIL import Image
 
 root = Path(__file__).resolve().parent.parent
-svg = root / 'assets' / 'leadership-icon.svg'
-inkscape = shutil.which('inkscape')
-if not inkscape:
-    raise SystemExit('Inkscape mangler i PATH. Ikonerne er allerede inkluderet i repositoryet.')
+source = root / 'assets' / 'leadership-icon-v2.png'
 
-for size in (192, 512):
-    target = root / 'assets' / f'icon-{size}.png'
-    subprocess.run([
-        inkscape, str(svg), '--export-type=png',
-        f'--export-filename={target}', f'--export-width={size}',
-        f'--export-height={size}'
-    ], check=True)
-    print(f'Updated {target.name}')
+with Image.open(source) as artwork:
+    artwork = artwork.convert('RGBA')
+    for size in (192, 512):
+        target = root / 'assets' / f'icon-{size}.png'
+        artwork.resize((size, size), Image.Resampling.LANCZOS).save(target, optimize=True)
+        print(f'Updated {target.name}')

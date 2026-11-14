@@ -153,3 +153,9 @@ QR-koden henviser til `https://dulmens.dk/downloads/leader.apk`. Verificér, at 
 ### Logo V1.1
 
 Det tidligere kronesymbol er afløst af et organisationsdiagram med en leder og tre forbundne medarbejdere. `assets/leadership-icon.svg` er designkilden. `assets/icon-192.png` og `assets/icon-512.png` matcher SVG'en og leveres i repositoryet. Når logoet ændres igen, kan PNG'erne regenereres med `python scripts/generate-icons.py` på en maskine med Inkscape installeret. Opdatér også serverens `/downloads/leader-logo.svg` efter denne ændring.
+
+### Premium-spillogo V1.2
+
+`assets/leadership-logo-v2.png` er det nye gennemarbejdede titel-logo med lysende, tredimensionel typografi og organisation som motiv. `assets/leadership-icon-v2.png` er det matchende kvadratiske Android-ikon; dette leverer nu `icon-192.png` og `icon-512.png`. Brug `python scripts/generate-icons.py` (Pillow) ved senere ændringer. Den gamle SVG bevares som historisk vektorasset, men bruges ikke længere som app-ikon. Logoillustrationerne er AI-genererede specifikt til spillet.
+
+En renset, fælles firespaltet downloads-side ligger i `deploy/dulmens-index-v2.html`. Den viser Neon, 3 Is a Crowd, Cozy og Leadership Empire i lige store kort på én række ved bred desktopvisning, to kolonner på tablets og én på mobil. Den nye logo-PNG skal placeres som `/var/www/dulmens.dk/downloads/leader-logo.png` på serveren.
