@@ -1,0 +1,6 @@
+{
+  "appId": "eu.leadershipempire.app",
+  "appName": "Leadership Empire",
+  "webDir": "www",
+  "server": {"androidScheme": "https"}
+}
