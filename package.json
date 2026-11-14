@@ -1,0 +1,16 @@
+{
+  "name": "leadership-empire",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx serve -l 8080 .",
+    "android:prepare": "node scripts/prepare-android.mjs",
+    "android:add": "npm run android:prepare && npx cap add android",
+    "android:sync": "npm run android:prepare && npx cap sync android",
+    "android:open": "npx cap open android",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {"@capacitor/android": "^7.4.0", "@capacitor/core": "^7.4.0"},
+  "devDependencies": {"@capacitor/cli": "^7.4.0"}
+}
