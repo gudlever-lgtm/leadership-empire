@@ -15,8 +15,20 @@
   <link rel="stylesheet" href="v05.css" />
   <link rel="stylesheet" href="v07.css" />
   <link rel="stylesheet" href="v10.css" />
+  <style>
+    #startup-splash{position:fixed;inset:0;z-index:9999;display:grid;place-content:center;justify-items:center;gap:22px;background:radial-gradient(circle at 50% 35%,#1e6761,#103d43 65%,#082830);color:#f8e8c6;transition:opacity .45s ease,visibility .45s ease}
+    #startup-splash img{width:min(84vw,430px);max-height:48vh;object-fit:contain;filter:drop-shadow(0 12px 20px #0007);animation:splash-arrive .7s ease-out both}
+    #startup-splash p{margin:0;font-size:12px;letter-spacing:.25em;text-transform:uppercase;font-weight:700;opacity:.9}
+    #startup-splash.is-ready{opacity:0;visibility:hidden;pointer-events:none}
+    @keyframes splash-arrive{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+    @media(prefers-reduced-motion:reduce){#startup-splash,#startup-splash img{animation:none;transition:none}}
+  </style>
 </head>
 <body>
+  <div id="startup-splash" role="status" aria-label="Leadership Empire starter" aria-live="polite">
+    <img src="assets/leadership-logo-v2.png" alt="Leadership Empire" width="440" height="293" onerror="this.onerror=null;this.src='assets/leadership-icon-v2.png'">
+    <p>Forbereder din karriere</p>
+  </div>
   <div class="app">
     <header class="topbar">
       <div class="brand"><img class="brand-logo" src="assets/leadership-logo-v2.png" alt="Leadership Empire" width="280" height="187" onerror="this.onerror=null;this.src='assets/leadership-icon-v2.png';this.classList.add('brand-logo-fallback')"></div>
@@ -68,5 +80,13 @@
   <script src="scenarios.js"></script>
   <script src="academy.js"></script>
   <script src="app.js"></script>
+  <script>
+    window.addEventListener('load',()=>{
+      window.setTimeout(()=>{
+        const splash=document.getElementById('startup-splash');
+        if(splash){splash.classList.add('is-ready');window.setTimeout(()=>splash.remove(),550)}
+      },650);
+    });
+  </script>
 </body>
 </html>

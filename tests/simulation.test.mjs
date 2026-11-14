@@ -3,10 +3,9 @@ import assert from 'node:assert/strict';
 import {readFileSync,existsSync} from 'node:fs';
 import {runInNewContext} from 'node:vm';
 
-function game(){
+function game(storage=new Map()){
  const elements=new Map();
  const element=id=>{if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',style:{},addEventListener(){},classList:{toggle(){}}});return elements.get(id)};
- const storage=new Map();
  const context={document:{getElementById:element,querySelectorAll(){return []}},localStorage:{getItem:key=>storage.get(key)||null,setItem:(k,v)=>storage.set(k,v)},window:{matchMedia:()=>({matches:true})},navigator:{},location:{protocol:'file:'},confirm:()=>true,alert(){},setInterval(){},console};
  runInNewContext(readFileSync(new URL('../engine.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../scenarios.js',import.meta.url),'utf8'),context);
@@ -212,6 +211,49 @@ test('all seven departments finish a full career with valid values',()=>{
   assert.equal(run('validWorld(state.world)'),true,department);
   assert.match(run('finalReport()'),/100 dage gennemført/,department);
  }
+});
+
+test('100-day regression: 21 careers retain progress, metrics and deterministic results',()=>{
+ const departments=['it','software','hr','finance','support','production','administration'];
+ const organizations=['public','private','ngo'];
+ let completed=0;
+ for(const department of departments)for(const org of organizations){
+  const storage=new Map(),run=game(storage);
+  run(`startCareer({org:'${org}',size:'medium',department:'${department}'})`);
+  run('applyChoice(1);applyFollowup(0)');
+  while(run('state.day')<100){
+   if(run('state.eventOpen'))run('resolveEvent(1)');
+   const previous=run('state.day');
+   run('advance()');
+   assert.equal(run('state.day'),previous+1,`${department}/${org} stalled on day ${previous}`);
+   assert.equal(run('validWorld(state.world)'),true,`${department}/${org} invalid world on day ${previous+1}`);
+   for(const key of ['trust','wellbeing','delivery','budget','quality','learning']){
+    const value=run(`state.world.metrics.${key}`);
+    assert.ok(Number.isFinite(value)&&value>=0&&value<=100,`${department}/${org} ${key} day ${previous+1}`);
+   }
+  }
+  if(run('state.eventOpen'))run('resolveEvent(1)');
+  assert.equal(run('state.day'),100);
+  assert.ok(run('state.world.completed')>0);
+  assert.match(run('finalReport()'),/100 dage gennemført/);
+  const saved=run('JSON.stringify(state)');
+  const resumed=game(storage);
+  assert.equal(resumed('JSON.stringify(state)'),saved,`${department}/${org} save/resume mismatch`);
+  resumed('advance()');
+  assert.equal(resumed('state.day'),100);
+  completed++;
+ }
+ assert.equal(completed,21);
+});
+
+test('branded loading screen is shipped with the Android web bundle',()=>{
+ const root=new URL('../',import.meta.url);
+ const html=readFileSync(new URL('index.html',root),'utf8');
+ const bundle=readFileSync(new URL('scripts/prepare-android.mjs',root),'utf8');
+ assert.match(html,/id="startup-splash"/);
+ assert.match(html,/startup-splash[\s\S]*leadership-logo-v2\.png/);
+ assert.match(html,/is-ready/);
+ assert.match(bundle,/cpSync\(join\(root,'assets'\)/);
 });
 
 test('invalid save data is rejected without replacing the current game',async()=>{

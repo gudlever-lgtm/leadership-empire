@@ -1,0 +1,46 @@
+# Leadership Empire — V2.0 roadmap
+
+## V1 baseline (accepted 2026-11-14)
+
+- Layout and premium logo are accepted as V1; avoid a broad visual redesign.
+- The logo appears on the web startup/loading overlay and in the game header.
+- Android packaging includes the app launcher icon; a physical-device visual check is still required.
+- 27 automated checks pass, including 21 distinct 100-day careers with save/restart validation.
+- These are deterministic simulation checks, not proof of real-world management validity or device usability.
+
+## V2 product goal
+
+Make leadership decisions matter **over time**, not just change a score immediately. Preserve offline play, Android compatibility, accessible touch controls and existing saves.
+
+### P0: safety and compatibility
+
+1. Manual Android smoke test (fresh install and update): splash, full-screen layout, logo, navigation, touch and return from background.
+2. Save-schema migration tests before introducing new employee fields or long-term consequences; never silently reset a career.
+3. Repeat 100-day regression across all departments and organizations after each simulation-engine change.
+
+### P1: employee behavior and consequences
+
+1. Model visible employee needs (workload, autonomy, recognition, psychological safety) as **game mechanics** with bounded and documented effects.
+2. Create incident/event threads with a beginning, follow-up and resolution spanning 5–20 days.
+3. Have the game explain why morale, collaboration and delivery changed, including trade-offs and delayed outcomes.
+4. Guard against unavoidable failure spirals: provide recovery options with resource costs and clear feedback.
+
+### P2: management dashboard
+
+1. Show 7/30-day trends for delivery, trust, wellbeing and budget, not just current values.
+2. Surface leading indicators: workload by person, overdue tasks and team relationship risks.
+3. End-of-career report compares starting conditions, decisions, trends and outcomes; label values as a simulation.
+
+### P3: content and polish
+
+1. Department-specific story arcs in all seven careers and meaningful replays.
+2. A concise first-time tutorial, adjustable pacing, reduced-motion support and sound that can be muted.
+3. UI V2 should refine information density and phone ergonomics without replacing the accepted V1 brand.
+
+## V2 definition of done
+
+- All department/organization combinations finish 100 days without deadlocks or invalid state.
+- Save migration restores an old V1 career and retains its decisions and data.
+- At least three distinct multi-day case chains have testable, observable downstream effects.
+- Dashboard trends reconcile with the underlying simulation and end-of-career report.
+- Android installation/update and gameplay smoke tests are verified on a physical phone.

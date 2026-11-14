@@ -1,4 +1,4 @@
-const CACHE='leadership-empire-v1.0-logo5';
+const CACHE='leadership-empire-v1.0-splash1';
 const STATIC=['./','./index.html','./styles.css','./v02.css','./v03.css','./v04.css','./v05.css','./v07.css','./v10.css','./engine.js','./scenarios.js','./academy.js','./app.js','./manifest.webmanifest','./assets/leadership-icon.svg','./assets/leadership-icon-v2.png','./assets/leadership-logo-v2.png','./assets/icon-192.png','./assets/icon-512.png','./assets/office-v03.png','./assets/employee-female-v1.png','./assets/employee-male-v1.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(STATIC)));self.skipWaiting()});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))));self.clients.claim()});
