@@ -149,3 +149,7 @@ Website-skabelonen ligger i `deploy/dulmens-leadership-card.html`. Indsæt HTML-
 | `assets/leader-qr.svg` | `/var/www/dulmens.dk/downloads/leader-qr.svg` |
 
 QR-koden henviser til `https://dulmens.dk/downloads/leader.apk`. Verificér, at download faktisk svarer 200 og har Android-APK-indhold, før du viser QR-koden til brugere. Den konkrete live-serverfil er ikke tilgængelig i udviklingsmiljøet, så indføjningen på hjemmesiden skal udføres på serveren.
+
+### Logo V1.1
+
+Det tidligere kronesymbol er afløst af et organisationsdiagram med en leder og tre forbundne medarbejdere. `assets/leadership-icon.svg` er designkilden. `assets/icon-192.png` og `assets/icon-512.png` matcher SVG'en og leveres i repositoryet. Når logoet ændres igen, kan PNG'erne regenereres med `python scripts/generate-icons.py` på en maskine med Inkscape installeret. Opdatér også serverens `/downloads/leader-logo.svg` efter denne ændring.
