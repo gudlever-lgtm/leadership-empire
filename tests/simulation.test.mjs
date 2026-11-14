@@ -8,6 +8,7 @@ function game(){
  const element=id=>{if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',style:{},addEventListener(){},classList:{toggle(){}}});return elements.get(id)};
  const storage=new Map();
  const context={document:{getElementById:element,querySelectorAll(){return []}},localStorage:{getItem:key=>storage.get(key)||null,setItem:(k,v)=>storage.set(k,v)},window:{matchMedia:()=>({matches:true})},navigator:{},location:{protocol:'file:'},confirm:()=>true,setInterval(){},console};
+ runInNewContext(readFileSync(new URL('../engine.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../app.js',import.meta.url),'utf8'),context);
  return code=>runInNewContext(code,context);
 }
@@ -77,4 +78,25 @@ test('unsupported department is rejected without replacing the game',()=>{
  const run=game();
  assert.equal(run("startCareer({org:'public',size:'small',department:'unknown'})"),false);
  assert.equal(run('state.config.department'),'it');
+});
+
+test('work engine advances tasks reproducibly and closes at day 100',()=>{
+ const a=game(),b=game();
+ for(let i=0;i<99;i++){a('advance()');b('advance()')}
+ assert.equal(a('state.day'),100);
+ assert.equal(a('state.world.day'),100);
+ assert.ok(a('state.world.completed')>0);
+ assert.equal(a('JSON.stringify(state.world)'),b('JSON.stringify(state.world)'));
+ a('advance()');
+ assert.equal(a('state.day'),100);
+});
+
+test('employees can train and tasks can be reassigned',()=>{
+ const run=game();
+ const before=run('state.world.team[0].skill');
+ run("employeeAction('train',0)");
+ assert.equal(run('state.world.team[0].skill'),before+5);
+ const id=run('state.world.tasks[0].id');
+ run(`reassign(${id},3)`);
+ assert.equal(run('state.world.tasks[0].assigned'),3);
 });

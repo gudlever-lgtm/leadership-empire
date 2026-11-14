@@ -77,3 +77,14 @@ Grafikken er nu visuelt tættere på det godkendte koncept, men endnu ikke en fu
 - Eksisterende lagring bevares; oprettelse af ny karriere kræver bekræftelse.
 
 V0.4 er fortsat en prototype: De syv afdelinger deler hovedparten af beslutningsmotoren og har endnu ikke egne KPI'er og opgavemodeller. Se [V1_ROADMAP.md](V1_ROADMAP.md) for en realistisk vurdering af vejen til første egentlige spilversion.
+
+## V0.5 Work and Capacity Engine
+
+- Separat deterministisk `engine.js` med arbejdsopgaver, deadlines, kompetence, motivation, energi og relationer.
+- Nye opgaver kommer ind hver dag; medarbejderne løser deres tildelte opgaver og kan overskride deadlines.
+- Opgavetyperne tilpasses afdelingstype, og spilleren kan flytte opgaver mellem medarbejdere.
+- Personalehandlinger: samtale, uddannelse og aflastning påvirker fremtidig kapacitet og arbejdsglæde.
+- Ny side **Opgaver** viser backlog, forfaldne sager, afsluttede leverancer og teamkapacitet.
+- Motoren bruger en fast seed og kan genafspilles i tests; tidligere gemte spil migreres til V0.5-modellen.
+
+Det er en første egentlige driftssimulation, men endnu ikke en komplet organisatorisk simulation med tværgående relationer, budgetportefølje eller dybt afdelingsspecifikt indhold.
