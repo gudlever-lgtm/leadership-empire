@@ -61,6 +61,20 @@ try {
     Write-Host "Package: $artifact" -ForegroundColor Green
     Write-Host ("Size: {0:N2} MB" -f ($file.Length / 1MB))
     Write-Host "SHA256: $checksum"
+    if ($Platform -eq 'apk') {
+        $downloads = 'C:\Users\osoman\Downloads'
+        if (-not (Test-Path -LiteralPath $downloads -PathType Container)) {
+            throw "Download-mappen blev ikke fundet: $downloads"
+        }
+        $downloadApk = Join-Path $downloads 'leader.apk'
+        Copy-Item -LiteralPath $artifact -Destination $downloadApk -Force
+        $copiedChecksum = (Get-FileHash -LiteralPath $downloadApk -Algorithm SHA256).Hash
+        if ($copiedChecksum -ne $checksum) {
+            throw 'Kopiering af leader.apk fejlede checksum-kontrollen'
+        }
+        Write-Host "APK kopieret til: $downloadApk" -ForegroundColor Green
+        Write-Host "Kopieret SHA256: $copiedChecksum"
+    }
     Write-Host ("Total time: {0:mm\:ss}" -f ((Get-Date) - $started)) -ForegroundColor Green
     if ($Platform -eq 'aab') { Write-Warning 'Release AAB kræver separat signing-konfiguration, før den kan distribueres.' }
     if ($OpenAndroidStudio) { Run 'Open Android Studio' 'npx.cmd' @('cap', 'open', 'android') }

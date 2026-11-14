@@ -238,3 +238,14 @@ test('v1 graphical assets are present and included in offline/android package',(
  assert.match(script,/v10\.css/);
  assert.match(worker,/leadership-empire-v1\.0/);
 });
+
+test('Windows APK target and standalone website card are configured',()=>{
+ const root=new URL('../',import.meta.url);
+ const build=readFileSync(new URL('build-android.ps1',root),'utf8');
+ const card=readFileSync(new URL('deploy/dulmens-leadership-card.html',root),'utf8');
+ assert.match(build,/C:\\Users\\osoman\\Downloads/);
+ assert.match(build,/leader\.apk/);
+ assert.match(build,/copiedChecksum/);
+ for(const name of ['leader.apk','leader-logo.svg','leader-qr.svg'])assert.ok(card.includes('/downloads/'+name));
+ assert.ok(existsSync(new URL('assets/leader-qr.svg',root)));
+});

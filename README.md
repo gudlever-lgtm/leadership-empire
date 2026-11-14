@@ -135,3 +135,17 @@ git pull --ff-only origin main
 ```
 
 Alternativt kan den manuelle GitHub Actions-workflow **Android debug build** køres fra fanen Actions. Den producerer en debug-APK som artifact, hvis workflowet lykkes. En signeret release-AAB kræver særskilt release-signering, keystore og test. Der er ikke integreret webkonto eller synkronisering i V1.0; eksport/import JSON er den private, manuelle overførsel.
+
+### Windows-download og dulmens.dk
+
+Ved en vellykket `-Platform apk`-build kopieres APK'en automatisk til `C:\Users\osoman\Downloads\leader.apk`. Scriptet sammenligner SHA-256 før og efter kopieringen og stopper med fejl ved manglende downloadmappe. `-Platform aab` påvirkes ikke.
+
+Website-skabelonen ligger i `deploy/dulmens-leadership-card.html`. Indsæt HTML-blokken i spilsektionen på `/var/www/dulmens.dk/index.html` uden at erstatte de andre spil. Kopiér disse filer til serveren:
+
+| Lokal kilde | Serverdestination |
+|---|---|
+| `C:\Users\osoman\Downloads\leader.apk` | `/var/www/dulmens.dk/downloads/leader.apk` |
+| `assets/leadership-icon.svg` | `/var/www/dulmens.dk/downloads/leader-logo.svg` |
+| `assets/leader-qr.svg` | `/var/www/dulmens.dk/downloads/leader-qr.svg` |
+
+QR-koden henviser til `https://dulmens.dk/downloads/leader.apk`. Verificér, at download faktisk svarer 200 og har Android-APK-indhold, før du viser QR-koden til brugere. Den konkrete live-serverfil er ikke tilgængelig i udviklingsmiljøet, så indføjningen på hjemmesiden skal udføres på serveren.
