@@ -13,6 +13,7 @@
   <link rel="stylesheet" href="v03.css" />
   <link rel="stylesheet" href="v04.css" />
   <link rel="stylesheet" href="v05.css" />
+  <link rel="stylesheet" href="v07.css" />
 </head>
 <body>
   <div class="app">
@@ -22,7 +23,7 @@
       <button id="reset" class="icon-btn" title="Start forfra" aria-label="Start forfra">↻</button>
     </header>
     <main>
-      <section class="intro"><div><span class="eyebrow">CAREER MODE · DAG <span id="day">1</span> AF 100</span><h1 id="page-title">Din nye afdeling</h1><p id="subtitle">12 medarbejdere · IT & Infrastruktur · En afdeling, der har brug for ledelse</p></div><div class="intro-actions"><button id="new-career" class="btn secondary">⚙ Ny karriere</button><button id="advance" class="btn secondary">Næste dag →</button><button id="academy-toggle" class="btn primary">🎓 Leadership Academy</button></div></section>
+      <section class="intro"><div><span class="eyebrow">CAREER MODE · DAG <span id="day">1</span> AF 100</span><h1 id="page-title">Din nye afdeling</h1><p id="subtitle">12 medarbejdere · IT & Infrastruktur · En afdeling, der har brug for ledelse</p></div><div class="intro-actions"><button id="new-career" class="btn secondary">⚙ Ny karriere</button><button id="advance" class="btn secondary">Næste dag →</button><button id="advance-week" class="btn secondary">+7 dage »</button><button id="academy-toggle" class="btn primary">🎓 Leadership Academy</button></div></section>
       <div class="layout">
         <section class="office-wrap" aria-label="Interaktivt kontormiljø">
           <div class="scene-header"><div><strong id="department-heading">🏢 IT & Infrastruktur</strong><span>Et levende team · Vælg en medarbejder eller et område</span></div><div class="scene-tools"><span class="status-pill">● Afdelingen er åben</span><button id="zoom-out" class="tool-btn" title="Zoom ud" aria-label="Zoom ud">−</button><span id="zoom-level">100%</span><button id="zoom-in" class="tool-btn" title="Zoom ind" aria-label="Zoom ind">+</button></div></div>
@@ -63,6 +64,8 @@
     </form>
   </dialog>
   <script src="engine.js"></script>
+  <script src="scenarios.js"></script>
+  <script src="academy.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

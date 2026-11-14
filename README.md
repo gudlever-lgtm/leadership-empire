@@ -88,3 +88,23 @@ V0.4 er fortsat en prototype: De syv afdelinger deler hovedparten af beslutnings
 - Motoren bruger en fast seed og kan genafspilles i tests; tidligere gemte spil migreres til V0.5-modellen.
 
 Det er en første egentlige driftssimulation, men endnu ikke en komplet organisatorisk simulation med tværgående relationer, budgetportefølje eller dybt afdelingsspecifikt indhold.
+
+## V0.6–V0.8 More Gameplay and Android Preparation
+
+- Simulationsprofiler for syv afdelingstyper med forskellige opgavekategorier, tilstrømning, kompleksitet og leverancemålinger.
+- Størrelsen af organisationen påvirker opgavemængden; organisationstypen påvirker budget og økonomisk afkast.
+- Udvidet scenariebibliotek med flere dilemmaer gennem hele 100-dages forløbet.
+- Leadership Academy har tre sammenhængende moduler med læringsmål, forskning, øvelser, refleksion og lokal underviservejledning.
+- Spil kan eksporteres og importeres som JSON. Indlæsning erstatter lokal fremgang efter bekræftelse.
+- Mulighed for at gå syv dage frem ad gangen, med pause ved større beslutninger.
+- Daglig grænse på tre personalehandlinger.
+- PWA-ikoner i 192 og 512 pixels og offline-cache.
+- `build-apk.ps1`/`build-android.ps1` til lokal Windows-build og en manuel GitHub Actions-debugbuild.
+
+Byg lokalt på Windows fra projektets rod:
+
+```powershell
+.\build-apk.ps1 -Platform apk
+```
+
+For AAB bruges `-Platform aab`. Release-AAB kræver separat signing. Android-pakken er endnu ikke valideret på en fysisk enhed i denne udviklingssession.

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {readFileSync} from 'node:fs';
+import {readFileSync,existsSync} from 'node:fs';
 import {runInNewContext} from 'node:vm';
 
 function game(){
@@ -9,6 +9,8 @@ function game(){
  const storage=new Map();
  const context={document:{getElementById:element,querySelectorAll(){return []}},localStorage:{getItem:key=>storage.get(key)||null,setItem:(k,v)=>storage.set(k,v)},window:{matchMedia:()=>({matches:true})},navigator:{},location:{protocol:'file:'},confirm:()=>true,setInterval(){},console};
  runInNewContext(readFileSync(new URL('../engine.js',import.meta.url),'utf8'),context);
+ runInNewContext(readFileSync(new URL('../scenarios.js',import.meta.url),'utf8'),context);
+ runInNewContext(readFileSync(new URL('../academy.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../app.js',import.meta.url),'utf8'),context);
  return code=>runInNewContext(code,context);
 }
@@ -99,4 +101,100 @@ test('employees can train and tasks can be reassigned',()=>{
  const id=run('state.world.tasks[0].id');
  run(`reassign(${id},3)`);
  assert.equal(run('state.world.tasks[0].assigned'),3);
+});
+
+test('departments have different task categories and demand',()=>{
+ const it=game(),hr=game();
+ hr("startCareer({org:'public',size:'medium',department:'hr'})");
+ assert.notEqual(it('state.world.tasks[0].title'),hr('state.world.tasks[0].title'));
+ for(let i=0;i<30;i++){it('advance()');hr('advance()')}
+ assert.notEqual(it('state.world.tasks.length'),hr('state.world.tasks.length'));
+});
+
+test('priority policy can change without altering existing tasks',()=>{
+ const run=game();
+ const before=run('state.world.tasks.length');
+ run("setWorkPolicy('deadline')");
+ assert.equal(run('state.world.policy.priority'),'deadline');
+ assert.equal(run('state.world.tasks.length'),before);
+});
+
+test('full hundred days plays through many decisions without exhausted cases',()=>{
+ const run=game();
+ run('applyChoice(1);applyFollowup(0)');
+ while(run('state.day')<100){if(run('state.eventOpen'))run('resolveEvent(0)');run('advance()')}
+ if(run('state.eventOpen'))run('resolveEvent(0)');
+ assert.equal(run('state.day'),100);
+ assert.ok(run('state.eventIndex')>=15);
+ assert.equal(run('state.eventOpen'),false);
+});
+
+test('academy offers three complete modules and preserves reflection',()=>{
+ const run=game();
+ assert.equal(run('LeadershipAcademy.modules.length'),3);
+ run("academySelect(1);academyAnswer(0);document.getElementById('reflection').value='Jeg ville aftale opfølgning efter to uger.';academySave()");
+ assert.equal(run('state.academy.completed.length'),1);
+ assert.equal(run('state.academy.selected'),1);
+ assert.match(run('state.academy.notes.motivation'),/opfølgning/);
+});
+
+test('every scenario has three decisions and explanation text',()=>{
+ const run=game();
+ for(const dept of ['it','hr','production','software','support','finance','administration']){
+  for(let i=0;i<run(`LeadershipScenarios.count('${dept}')`);i++){
+   const entry=run(`LeadershipScenarios.get('${dept}',${i})`);
+   assert.equal(entry.options.length,3);
+   assert.ok(entry.title.length>5);
+   assert.ok(entry.options.every(choice=>choice[1].length>10));
+  }
+ }
+});
+
+test('saved games can be imported into a fresh career',async()=>{
+ const run=game();
+ run('applyChoice(1);applyFollowup(0);advance()');
+ const exported=run('JSON.stringify({format:"leadership-empire-save",version:1,game:state})');
+ run("startCareer({org:'ngo',size:'small',department:'hr'})");
+ assert.equal(run('state.day'),1);
+ const validFile={text:async()=>exported};
+ assert.equal(await run('importGame') (validFile),true);
+ assert.equal(run('state.day'),2);
+ assert.equal(run('state.config.department'),'it');
+});
+
+test('week advance pauses at leadership decisions',()=>{
+ const run=game();
+ run('applyChoice(1);applyFollowup(0);advanceWeek()');
+ assert.equal(run('state.day'),8);
+ run('advanceWeek()');
+ assert.equal(run('state.day'),15);
+ assert.equal(run('state.eventOpen'),true);
+});
+
+test('PWA has production icons and all mandatory scripts',()=>{
+ const root=new URL('../',import.meta.url);
+ const manifest=JSON.parse(readFileSync(new URL('manifest.webmanifest',root),'utf8'));
+ for(const icon of manifest.icons)assert.ok(existsSync(new URL(icon.src,root)),icon.src);
+ const html=readFileSync(new URL('index.html',root),'utf8');
+ for(const name of ['engine.js','scenarios.js','academy.js','app.js'])assert.match(html,new RegExp(name.replace('.','\\.')));
+});
+
+test('leadership actions are limited per day and reset next day',()=>{
+ const run=game();
+ for(let i=0;i<3;i++)run("employeeAction('talk',0)");
+ assert.equal(run('state.world.actionsRemaining'),0);
+ assert.equal(run("LeadershipEngine.action(state.world,'talk',0)"),false);
+ run('advance()');
+ assert.equal(run('state.world.actionsRemaining'),3);
+});
+
+test('organization size changes workload and private budget differs',()=>{
+ const run=game();
+ run("startCareer({org:'private',size:'large',department:'it'})");
+ assert.equal(run('state.world.tasks.length'),18);
+ assert.equal(run('state.world.organization'),'private');
+ assert.equal(run('state.budget'),85);
+ run("startCareer({org:'ngo',size:'small',department:'it'})");
+ assert.equal(run('state.world.tasks.length'),10);
+ assert.equal(run('state.budget'),65);
 });
