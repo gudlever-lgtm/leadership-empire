@@ -40,6 +40,7 @@ try {
     Run 'Prepare web bundle' 'npm.cmd' @('run', 'android:prepare')
     if (-not (Test-Path 'android')) { Run 'Create Android platform' 'npx.cmd' @('cap', 'add', 'android') }
     Run 'Sync Android' 'npx.cmd' @('cap', 'sync', 'android')
+    Run 'Install Leadership Empire launcher icon' 'node' @('scripts/install-android-icon.mjs')
 
     Step 'Building package with Gradle'
     $gradleWrapper = Join-Path $projectRoot 'android\gradlew.bat'
