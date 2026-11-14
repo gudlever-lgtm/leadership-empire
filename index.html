@@ -10,6 +10,7 @@
   <title>Leadership Empire — Prototype</title>
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="v02.css" />
+  <link rel="stylesheet" href="v03.css" />
 </head>
 <body>
   <div class="app">
@@ -22,12 +23,17 @@
       <section class="intro"><div><span class="eyebrow">CAREER MODE · DAG <span id="day">1</span> AF 100</span><h1 id="page-title">Din nye afdeling</h1><p id="subtitle">12 medarbejdere · IT & Infrastruktur · En afdeling, der har brug for ledelse</p></div><div class="intro-actions"><button id="advance" class="btn secondary">Næste dag →</button><button id="academy-toggle" class="btn primary">🎓 Leadership Academy</button></div></section>
       <div class="layout">
         <section class="office-wrap" aria-label="Interaktivt kontormiljø">
-          <div class="scene-header"><div><strong>🏢 IT & Infrastruktur</strong><span>Tryk på en medarbejder for at se profilen</span></div><span class="status-pill">● Afdelingen er åben</span></div>
+          <div class="scene-header"><div><strong>🏢 IT & Infrastruktur</strong><span>Et levende team · Vælg en medarbejder eller et område</span></div><div class="scene-tools"><span class="status-pill">● Afdelingen er åben</span><button id="zoom-out" class="tool-btn" title="Zoom ud" aria-label="Zoom ud">−</button><span id="zoom-level">100%</span><button id="zoom-in" class="tool-btn" title="Zoom ind" aria-label="Zoom ind">+</button></div></div>
           <div class="office" id="office">
+            <div class="office-canvas" id="office-canvas">
             <div class="zone meeting"><span class="zone-name">MØDERUM</span><div class="meeting-table"></div><div class="chair c1"></div><div class="chair c2"></div><div class="chair c3"></div></div>
             <div class="zone coffee"><span class="zone-name">KAFFE & SAMARBEJDE</span><div class="sofa">▰</div><div class="coffee-table">☕</div><div class="plant">🌿</div></div>
             <div class="zone work"><span class="zone-name">ARBEJDSOMRÅDE</span><div class="desks"><div class="desk">💻</div><div class="desk">💻</div><div class="desk">💻</div><div class="desk">💻</div><div class="desk">💻</div><div class="desk">💻</div></div></div>
+            <button class="area-hotspot hotspot-meeting" data-area="meeting" aria-label="Se mødelokale"><span>👥 Mødelokale</span></button>
+            <button class="area-hotspot hotspot-lounge" data-area="lounge" aria-label="Se lounge"><span>☕ Lounge</span></button>
+            <button class="area-hotspot hotspot-work" data-area="work" aria-label="Se arbejdsområdet"><span>💻 Arbejdsområde</span></button>
             <div class="characters" id="characters"></div>
+            </div>
           </div>
           <div class="scene-footer"><span>💡 Tryk på en medarbejder. Relationer og opgaver påvirker teamet.</span><span id="activity">Aktiv situation: Den stærke specialist</span></div>
         </section>

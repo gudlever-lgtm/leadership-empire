@@ -1,0 +1,32 @@
+/* V0.3 concept-art fidelity. Clean environment plate with interactive overlays. */
+:root{--deep:#174f50;--cream:#fff9ef;--gold:#e6ae59;--coral:#da866d}
+.topbar{background:linear-gradient(120deg,#123f45,#1b6663);border-bottom-color:#e3ae60}
+.brand .crown{filter:drop-shadow(0 3px 2px #0002)}
+.office-wrap{background:#fbf6e9;border-color:#ddc8a2}
+.scene-header{background:#fff9ee;border-bottom:1px solid #e4d8c6}
+.scene-tools{display:flex;align-items:center;gap:7px;color:#48726c;font-size:12px;font-weight:800}
+.tool-btn{border:1px solid #ccd8ce;background:white;color:#215451;border-radius:10px;width:32px;height:30px;font-size:21px;cursor:pointer}
+.office{height:auto;min-height:unset;aspect-ratio:16/9;background:#e5cda9;overflow:auto;scrollbar-width:thin}
+.office:before{display:none}
+.office-canvas{position:relative;width:100%;height:100%;min-height:100%;min-width:720px;transform-origin:center center;background-image:url('assets/office-v03.png');background-size:100% 100%;background-position:center;background-repeat:no-repeat}
+.office .zone{display:none}
+.office .characters{position:absolute;inset:0;pointer-events:none}
+.office .person{pointer-events:auto;transition:left 2.2s ease-in-out,top 2.2s ease-in-out,transform .25s ease;filter:drop-shadow(0 2px 4px #3c403150)}
+.office .person .character-art{transform:scale(.92);transform-origin:bottom center}
+.office .person label{background:#fff8edee;border:1px solid #e4c9a9;color:#31574e}
+.area-hotspot{position:absolute;z-index:1;border:0;border-radius:12px;background:#124f4cad;color:#fff9e9;padding:6px 9px;font-size:11px;font-weight:800;letter-spacing:.2px;box-shadow:0 3px 8px #153e3c33;cursor:pointer;transition:background .2s}
+.area-hotspot:hover,.area-hotspot:focus-visible{background:#da866d}
+.hotspot-meeting{left:5%;top:5%}.hotspot-lounge{right:5%;top:5%}.hotspot-work{left:5%;top:43%}
+.scene-footer{background:#fff9ed;border-top:1px solid #e6d2b4}
+.sidepanel{background:linear-gradient(165deg,#fffcf5,#fff);border-color:#ddc8a2}
+.card{background:#f1f6ee}.card.warm{background:#fff2dd}
+.btn.primary,.nav.active{background:linear-gradient(130deg,#d9775d,#e69c71)}
+.bottom-nav{background:linear-gradient(110deg,#12504e,#1d665f);border-color:#d2b889}
+.person.has-task:after{content:'●';position:absolute;left:-7px;top:4px;color:#7ccc9a;font-size:15px;text-shadow:0 0 2px white}
+.area-list{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}
+.area-tile{background:#fff5e5;border:1px solid #e6d3b9;padding:10px 6px;border-radius:12px;text-align:center;color:#4a675c;font-size:12px;cursor:pointer}
+.area-tile strong{display:block;color:#245c57;margin:4px 0}
+.social-note{border-radius:12px;background:#e7f1e9;padding:11px 12px;color:#41695a;font-size:12px;margin:12px 0}
+@media(max-width:960px){.office{aspect-ratio:auto;height:390px}.office-canvas{width:720px}.scene-tools .status-pill{display:none}}
+@media(max-width:550px){.office{height:350px}.office-canvas{width:720px}.scene-header{align-items:start}.scene-header strong{font-size:13px}.scene-header span:not(.status-pill){font-size:10px}.scene-tools{gap:4px}.tool-btn{height:28px;width:28px}.scene-footer{line-height:1.5}}
+@media(prefers-reduced-motion:reduce){.office .person{transition:none}}

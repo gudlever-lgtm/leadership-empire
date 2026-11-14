@@ -5,7 +5,7 @@ import {runInNewContext} from 'node:vm';
 
 function game(){
  const elements=new Map();
- const element=id=>{if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',addEventListener(){},classList:{toggle(){}}});return elements.get(id)};
+ const element=id=>{if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',style:{},addEventListener(){},classList:{toggle(){}}});return elements.get(id)};
  const storage=new Map();
  const context={document:{getElementById:element,querySelectorAll(){return []}},localStorage:{getItem:key=>storage.get(key)||null,setItem:(k,v)=>storage.set(k,v)},window:{matchMedia:()=>({matches:true})},navigator:{},location:{protocol:'file:'},confirm:()=>true,setInterval(){},console};
  runInNewContext(readFileSync(new URL('../app.js',import.meta.url),'utf8'),context);
@@ -41,4 +41,17 @@ test('reset includes independent relationship and energy arrays',()=>{
  const run=game();
  run('state.relations[0]=10;state={...DEFAULT,relations:DEFAULT.relations.slice(),energy:DEFAULT.energy.slice()}');
  assert.equal(run('state.relations[0]'),68);
+});
+
+test('v0.3 office zoom is bounded',()=>{
+ const run=game();
+ run('setZoom(3)');
+ assert.equal(run('zoom'),1.6);
+ run('setZoom(.2)');
+ assert.equal(run('zoom'),1);
+});
+
+test('new illustrated office asset is referenced by stylesheet',()=>{
+ const style=readFileSync(new URL('../v03.css',import.meta.url),'utf8');
+ assert.match(style,/office-v03\.png/);
 });

@@ -57,3 +57,13 @@ V0.2 er offline-first og bruger samme HTML/CSS/JavaScript-kerne på web og i And
 En senere hjemmeside kan rumme information, Academy-kurser og brugerportal. Et separat API kan håndtere godkendt synkronisering af spil og undervisningsforløb mellem platforme. Private refleksioner og underviserdata skal holdes adskilt. Domæne og produktnavn kan besluttes senere.
 
 V0.2's figurer har idle-animation, ikke egentlig ruteplanlægning gennem kontoret. Beslutninger bruger fortsat en forenklet, håndskrevet simulationsmodel.
+
+## V0.3 Visual Foundation
+
+- Ny illustreret kontorbaggrund i varm, blød 2.5D-stil med mødelokale, lounge og seks arbejdsstationer. Genereret specifikt til spillet og gemt i `assets/office-v03.png`.
+- Separat interaktivt lag med klikbare medarbejdere og tre områder.
+- Fire medarbejdere bevæger sig mellem definerede stationer på en simpel tidsstyret rute; øvrige medarbejdere har idle-animationer.
+- Zoomknapper, horisontal panorering på små skærme og opdateret UI-styling.
+- Samme baggrund og interaktive funktioner inkluderes i Android-webpakken.
+
+Grafikken er nu visuelt tættere på det godkendte koncept, men endnu ikke en fuld isometrisk 3D-simulation. Figurerne er CSS-illustrationer og deres bevægelsesruter er demonstrationslogik uden forhindringsdetektion. Det fulde organisationsvalg og flere afdelingstyper kommer i en senere version.
