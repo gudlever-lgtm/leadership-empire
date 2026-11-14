@@ -1,6 +1,8 @@
-# Leadership Empire — første prototype
+# Leadership Empire — The First 100 Days (V1.0)
 
 En selvstændig, lokal browserprototype på dansk. Ingen eksterne tjenester, backend eller afhængigheder kræves.
+
+**V1.0-kodekandidat:** Android- og webversionen bruger samme offline spilkerne. Spillet er klar til teknisk test; en faktisk Android-installation, signeret AAB og brugerafprøvning er ikke udført i udviklingsmiljøet. Se [RELEASE_NOTES.md](RELEASE_NOTES.md) for en verificerbar status.
 
 ## Kør
 
@@ -108,3 +110,28 @@ Byg lokalt på Windows fra projektets rod:
 ```
 
 For AAB bruges `-Platform aab`. Release-AAB kræver separat signing. Android-pakken er endnu ikke valideret på en fysisk enhed i denne udviklingssession.
+
+## V1.0 — samlet spilforløb og visuelt løft
+
+- De første 100 dage kan spilles færdige med medarbejderhandlinger, opgavestyring, syv afdelingstyper, adskillige beslutningsforløb og en slutrapport.
+- To nye illustrationer af ansatte i kontorets varme 2.5D-stil erstatter de simple CSS-figurer. Figurerne varierer i placering og bevægelse, men sprites anvendes på flere ansatte. Illustrationerne er AI-genereret specifikt til projektet.
+- Bedre touch- og fokusmarkeringer, responsivt bundpanel og gennemarbejdet karrieredialog.
+- Strengere kontrol af importerede gemmefiler, så åbenlyst ugyldige opgave- og medarbejderdata afvises.
+- Tre faglige Academy-moduler med valgsituationer, refleksion, kilder og underviservejledning. Cases og konsekvensvægte er spilforfatterens model og ikke en videnskabeligt valideret lederbedømmelse.
+- Regressionstest for alle syv afdelinger over 100 dage samt kontrol af offline-assets og Android-webpakke.
+
+### V1.0 udviklingstest
+
+```bash
+npm test
+npm run android:prepare
+```
+
+### Android-test på din Windows-pc
+
+```powershell
+git pull --ff-only origin main
+.\build-apk.ps1 -Platform apk
+```
+
+Alternativt kan den manuelle GitHub Actions-workflow **Android debug build** køres fra fanen Actions. Den producerer en debug-APK som artifact, hvis workflowet lykkes. En signeret release-AAB kræver særskilt release-signering, keystore og test. Der er ikke integreret webkonto eller synkronisering i V1.0; eksport/import JSON er den private, manuelle overførsel.

@@ -7,7 +7,7 @@ function game(){
  const elements=new Map();
  const element=id=>{if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',style:{},addEventListener(){},classList:{toggle(){}}});return elements.get(id)};
  const storage=new Map();
- const context={document:{getElementById:element,querySelectorAll(){return []}},localStorage:{getItem:key=>storage.get(key)||null,setItem:(k,v)=>storage.set(k,v)},window:{matchMedia:()=>({matches:true})},navigator:{},location:{protocol:'file:'},confirm:()=>true,setInterval(){},console};
+ const context={document:{getElementById:element,querySelectorAll(){return []}},localStorage:{getItem:key=>storage.get(key)||null,setItem:(k,v)=>storage.set(k,v)},window:{matchMedia:()=>({matches:true})},navigator:{},location:{protocol:'file:'},confirm:()=>true,alert(){},setInterval(){},console};
  runInNewContext(readFileSync(new URL('../engine.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../scenarios.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../academy.js',import.meta.url),'utf8'),context);
@@ -197,4 +197,44 @@ test('organization size changes workload and private budget differs',()=>{
  run("startCareer({org:'ngo',size:'small',department:'it'})");
  assert.equal(run('state.world.tasks.length'),10);
  assert.equal(run('state.budget'),65);
+});
+
+test('all seven departments finish a full career with valid values',()=>{
+ for(const department of ['it','software','hr','finance','support','production','administration']){
+  const run=game();
+  run(`startCareer({org:'public',size:'medium',department:'${department}'})`);
+  run('applyChoice(1);applyFollowup(0)');
+  while(run('state.day')<100){if(run('state.eventOpen'))run('resolveEvent(1)');run('advance()')}
+  if(run('state.eventOpen'))run('resolveEvent(1)');
+  assert.equal(run('state.world.day'),100,department);
+  assert.ok(run('state.eventIndex')>=15,department);
+  assert.equal(run('state.world.completed')>0,true,department);
+  assert.equal(run('validWorld(state.world)'),true,department);
+  assert.match(run('finalReport()'),/100 dage gennemført/,department);
+ }
+});
+
+test('invalid save data is rejected without replacing the current game',async()=>{
+ const run=game();
+ const data=JSON.parse(run('JSON.stringify({format:"leadership-empire-save",version:1,game:state})'));
+ data.game.world.tasks[0].assigned=999;
+ assert.equal(await run('importGame')({text:async()=>JSON.stringify(data)}),false);
+ assert.equal(run('state.day'),1);
+ assert.equal(run('state.world.tasks[0].assigned'),0);
+});
+
+test('v1 graphical assets are present and included in offline/android package',()=>{
+ const root=new URL('../',import.meta.url);
+ const html=readFileSync(new URL('index.html',root),'utf8');
+ const stylesheet=readFileSync(new URL('v10.css',root),'utf8');
+ const worker=readFileSync(new URL('service-worker.js',root),'utf8');
+ const script=readFileSync(new URL('scripts/prepare-android.mjs',root),'utf8');
+ for(const name of ['employee-female-v1.png','employee-male-v1.png']){
+  assert.ok(existsSync(new URL('assets/'+name,root)),name);
+  assert.ok(worker.includes(name),name);
+ }
+ assert.match(html,/v10\.css/);
+ assert.match(stylesheet,/character-sprite/);
+ assert.match(script,/v10\.css/);
+ assert.match(worker,/leadership-empire-v1\.0/);
 });

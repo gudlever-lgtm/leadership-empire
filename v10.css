@@ -1,0 +1,24 @@
+/* V1.0 visual system — soft illustrated characters and touch-first controls. */
+.office .person .character-sprite{width:42px;height:63px;transform:none;animation:character-idle 3.1s ease-in-out infinite;animation-delay:var(--step);filter:drop-shadow(0 4px 3px #302b2450)}
+.character-sprite img{display:block;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
+.office .person .character-name{display:block;padding:3px 7px;background:#fffbefed;color:#24534c;border:1px solid #dec4a1;border-radius:9px;font-size:10px;font-weight:800;white-space:nowrap;box-shadow:0 2px 4px #0002}
+.office .person.selected .character-sprite{filter:drop-shadow(0 0 5px #fff4ba) drop-shadow(0 0 6px #e9a944)}
+.office .person.selected .character-name{background:#f8c871;color:#384333;border-color:#f4a94c}
+.office .person:focus-visible{outline:3px solid #f4b54e;border-radius:8px;outline-offset:3px}
+.office .person.has-task:after{top:6px;left:-6px}
+.office .person .flag{top:-12px;right:-13px}
+.area-hotspot:focus-visible,.btn:focus-visible,.nav:focus-visible,.choice:focus-visible,.tool-btn:focus-visible,.people-row:focus-visible{outline:3px solid #ffcf69;outline-offset:2px}
+button:disabled{cursor:not-allowed;opacity:.52;filter:grayscale(.4)}
+.sidepanel a{color:#16685f;overflow-wrap:anywhere}
+.result-card{padding:16px;border:2px solid #e3b867;border-radius:16px;background:#fff5de;margin:13px 0}
+.result-card>strong{font-size:18px;color:#285951}
+.career-dialog{border:1px solid #dfc4a0;border-radius:19px;background:#fffbf3;box-shadow:0 16px 55px #163b3855;color:#234d49;width:min(95vw,480px);max-height:88vh;overflow:auto}
+.career-dialog::backdrop{background:#173f42aa;backdrop-filter:blur(3px)}
+.career-dialog label{display:grid;gap:5px;margin:12px 0;font-size:13px;font-weight:750}
+.career-dialog select{min-height:44px;padding:10px;border:1px solid #b6d0c5;border-radius:10px;background:white;color:#234d49;font:inherit}
+.dialog-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px}
+.sidepanel .choice{min-height:46px}
+.scene-footer{flex-wrap:wrap}
+@media(max-width:700px){.office .person .character-sprite{width:39px;height:59px}.office .person .character-name{font-size:10px}.office{scroll-behavior:smooth}.intro-actions{gap:6px}.intro-actions .btn{min-height:42px}.bottom-nav{padding-bottom:env(safe-area-inset-bottom)}.app{padding-bottom:calc(86px + env(safe-area-inset-bottom))}}
+@media(max-width:380px){.intro-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.bottom-nav{border-width:2px}.nav{min-width:0}.nav span{font-size:8px}}
+@media(prefers-reduced-motion:reduce){.office .person .character-sprite{animation:none}.office{scroll-behavior:auto}}
