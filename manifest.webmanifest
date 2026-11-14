@@ -1,0 +1,14 @@
+{
+  "name": "Leadership Empire",
+  "short_name": "Leadership",
+  "description": "Managementspil med levende medarbejdere og Leadership Academy",
+  "lang": "da",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#eaf1e9",
+  "theme_color": "#124a49",
+  "icons": [
+    {"src": "assets/leadership-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}
