@@ -55,3 +55,26 @@ test('new illustrated office asset is referenced by stylesheet',()=>{
  const style=readFileSync(new URL('../v03.css',import.meta.url),'utf8');
  assert.match(style,/office-v03\.png/);
 });
+
+test('new career resets progress and adapts employee roles to department',()=>{
+ const run=game();
+ run('applyChoice(1);advance()');
+ assert.equal(run('state.day'),2);
+ assert.equal(run("startCareer({org:'ngo',size:'small',department:'hr'})"),true);
+ assert.equal(run('state.day'),1);
+ assert.equal(run('state.stage'),0);
+ assert.equal(run('state.budget'),65);
+ assert.equal(run('roleFor(PEOPLE[0])'),'Senior HR-partner');
+});
+
+test('later scenario reflects the selected department',()=>{
+ const run=game();
+ run("startCareer({org:'private',size:'large',department:'production'});state.eventIndex=2");
+ assert.match(run('scenario().title'),/kvalitetsproces/);
+});
+
+test('unsupported department is rejected without replacing the game',()=>{
+ const run=game();
+ assert.equal(run("startCareer({org:'public',size:'small',department:'unknown'})"),false);
+ assert.equal(run('state.config.department'),'it');
+});

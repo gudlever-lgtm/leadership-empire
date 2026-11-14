@@ -66,4 +66,14 @@ V0.2's figurer har idle-animation, ikke egentlig ruteplanlægning gennem kontore
 - Zoomknapper, horisontal panorering på små skærme og opdateret UI-styling.
 - Samme baggrund og interaktive funktioner inkluderes i Android-webpakken.
 
-Grafikken er nu visuelt tættere på det godkendte koncept, men endnu ikke en fuld isometrisk 3D-simulation. Figurerne er CSS-illustrationer og deres bevægelsesruter er demonstrationslogik uden forhindringsdetektion. Det fulde organisationsvalg og flere afdelingstyper kommer i en senere version.
+Grafikken er nu visuelt tættere på det godkendte koncept, men endnu ikke en fuld isometrisk 3D-simulation. Figurerne er CSS-illustrationer og deres bevægelsesruter er demonstrationslogik uden forhindringsdetektion. Afdelingstilpassede KPI'er og fuldt særskilt gameplay kommer i en senere version.
+
+## V0.4 Career Setup
+
+- Ny karriere-dialog med valg mellem offentlig organisation, privat virksomhed og NGO.
+- Tre organisationsstørrelser og syv afdelingstyper.
+- Medarbejdernes rollebetegnelser, afdelingens navn og en senere case tilpasses valget.
+- Forskelligt startbudget efter organisationstype og en første opsamling efter 100 dage.
+- Eksisterende lagring bevares; oprettelse af ny karriere kræver bekræftelse.
+
+V0.4 er fortsat en prototype: De syv afdelinger deler hovedparten af beslutningsmotoren og har endnu ikke egne KPI'er og opgavemodeller. Se [V1_ROADMAP.md](V1_ROADMAP.md) for en realistisk vurdering af vejen til første egentlige spilversion.

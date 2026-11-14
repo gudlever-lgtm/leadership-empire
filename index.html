@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="v02.css" />
   <link rel="stylesheet" href="v03.css" />
+  <link rel="stylesheet" href="v04.css" />
 </head>
 <body>
   <div class="app">
@@ -20,10 +21,10 @@
       <button id="reset" class="icon-btn" title="Start forfra" aria-label="Start forfra">↻</button>
     </header>
     <main>
-      <section class="intro"><div><span class="eyebrow">CAREER MODE · DAG <span id="day">1</span> AF 100</span><h1 id="page-title">Din nye afdeling</h1><p id="subtitle">12 medarbejdere · IT & Infrastruktur · En afdeling, der har brug for ledelse</p></div><div class="intro-actions"><button id="advance" class="btn secondary">Næste dag →</button><button id="academy-toggle" class="btn primary">🎓 Leadership Academy</button></div></section>
+      <section class="intro"><div><span class="eyebrow">CAREER MODE · DAG <span id="day">1</span> AF 100</span><h1 id="page-title">Din nye afdeling</h1><p id="subtitle">12 medarbejdere · IT & Infrastruktur · En afdeling, der har brug for ledelse</p></div><div class="intro-actions"><button id="new-career" class="btn secondary">⚙ Ny karriere</button><button id="advance" class="btn secondary">Næste dag →</button><button id="academy-toggle" class="btn primary">🎓 Leadership Academy</button></div></section>
       <div class="layout">
         <section class="office-wrap" aria-label="Interaktivt kontormiljø">
-          <div class="scene-header"><div><strong>🏢 IT & Infrastruktur</strong><span>Et levende team · Vælg en medarbejder eller et område</span></div><div class="scene-tools"><span class="status-pill">● Afdelingen er åben</span><button id="zoom-out" class="tool-btn" title="Zoom ud" aria-label="Zoom ud">−</button><span id="zoom-level">100%</span><button id="zoom-in" class="tool-btn" title="Zoom ind" aria-label="Zoom ind">+</button></div></div>
+          <div class="scene-header"><div><strong id="department-heading">🏢 IT & Infrastruktur</strong><span>Et levende team · Vælg en medarbejder eller et område</span></div><div class="scene-tools"><span class="status-pill">● Afdelingen er åben</span><button id="zoom-out" class="tool-btn" title="Zoom ud" aria-label="Zoom ud">−</button><span id="zoom-level">100%</span><button id="zoom-in" class="tool-btn" title="Zoom ind" aria-label="Zoom ind">+</button></div></div>
           <div class="office" id="office">
             <div class="office-canvas" id="office-canvas">
             <div class="zone meeting"><span class="zone-name">MØDERUM</span><div class="meeting-table"></div><div class="chair c1"></div><div class="chair c2"></div><div class="chair c3"></div></div>
@@ -48,6 +49,17 @@
       <button class="nav" data-view="academy">🎓<span>Academy</span></button>
     </nav>
   </div>
+  <dialog id="career-dialog" class="career-dialog" aria-labelledby="career-title">
+    <form method="dialog" id="career-form">
+      <div class="panel-tag">Leadership Empire</div>
+      <h2 id="career-title">Start en ny karriere</h2>
+      <p>Vælg hvilken organisation og afdeling du vil lede. Dit nuværende spil erstattes først, når du starter.</p>
+      <label>Organisationstype<select id="org-type"><option value="public">Offentlig organisation</option><option value="private">Privat virksomhed</option><option value="ngo">NGO</option></select></label>
+      <label>Organisationsstørrelse<select id="org-size"><option value="small">Lille (op til 50 ansatte)</option><option value="medium">Mellemstor (51–250 ansatte)</option><option value="large">Stor (over 250 ansatte)</option></select></label>
+      <label>Afdelingstype<select id="department-type"><option value="it">IT & Infrastruktur</option><option value="software">Softwareudvikling</option><option value="hr">HR & Personale</option><option value="finance">Økonomi</option><option value="support">Kundeservice</option><option value="production">Produktion</option><option value="administration">Administration</option></select></label>
+      <div class="dialog-actions"><button value="cancel" class="btn secondary">Annuller</button><button value="start" class="btn primary">Start karriere →</button></div>
+    </form>
+  </dialog>
   <script src="app.js"></script>
 </body>
 </html>
