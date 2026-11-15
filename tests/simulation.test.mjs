@@ -16,6 +16,7 @@ function game(storage=new Map()){
  runInNewContext(readFileSync(new URL('../learning.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../consequences.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../personalities.js',import.meta.url),'utf8'),context);
+ runInNewContext(readFileSync(new URL('../initiatives.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../app.js',import.meta.url),'utf8'),context);
  return code=>runInNewContext(code,context);
 }
@@ -163,6 +164,41 @@ test('V2 a decision changes affected employees and persists their reactions',()=
 test('V2 personalities are included in offline Android packaging',()=>{
  for(const file of ['index.html','service-worker.js','scripts/prepare-android.mjs']){
   assert.match(readFileSync(new URL('../'+file,import.meta.url),'utf8'),/personalities\.js/);
+ }
+});
+
+test('V2 autonomous employee initiative appears and can be answered',()=>{
+ const run=game();run('applyChoice(1);applyFollowup(0)');
+ for(let i=1;i<9;i++)run('advance()');
+ assert.equal(run('state.day'),9);
+ assert.equal(run('state.initiatives.items.length'),1);
+ assert.equal(run('state.initiatives.items[0].status'),'pending');
+ assert.match(run('initiativesHTML()'),/Medarbejderne tager initiativ/);
+ const before=run('state.world.team[0].motivation');
+ assert.equal(run('LeadershipInitiatives.respond(state,1,"listen")'),true);
+ assert.ok(run('state.world.team[0].motivation')>before);
+ assert.equal(run('LeadershipInitiatives.respond(state,1,"listen")'),false);
+});
+
+test('V2 ignored initiatives lapse with bounded effects',()=>{
+ const run=game();run('applyChoice(1);applyFollowup(0)');
+ for(let i=1;i<17;i++){if(run('state.eventOpen'))run('resolveEvent(0)');run('advance()')}
+ assert.equal(run('state.initiatives.items[0].status'),'expired');
+ assert.equal(run('state.initiatives.items[0].response'),'unanswered');
+ assert.equal(run('state.initiatives.items[0].effect.motivation'),-4);
+});
+
+test('V2 initiatives persist and old saves gain empty initiative state',()=>{
+ const storage=new Map(),run=game(storage);
+ run('state.day=9;state.world.day=9;LeadershipInitiatives.generate(state);save()');
+ assert.equal(game(storage)('state.initiatives.items.length'),1);
+ run('delete state.initiatives;save()');
+ assert.equal(game(storage)('state.initiatives.items.length'),0);
+});
+
+test('V2 initiative scripts are included in Android and offline packaging',()=>{
+ for(const file of ['index.html','service-worker.js','scripts/prepare-android.mjs']){
+  assert.match(readFileSync(new URL('../'+file,import.meta.url),'utf8'),/initiatives\.js/);
  }
 });
 

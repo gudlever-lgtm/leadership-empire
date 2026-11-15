@@ -73,6 +73,15 @@ Make leadership decisions matter **over time**, not just change a score immediat
 - The mechanic is deterministic and deliberately simplified; profiles are fictional game preferences, **not** psychological diagnoses or employee personality assessments.
 - 50 automated tests cover the current game, including 21 complete 100-day careers. Native Android device QA is still outstanding.
 
+## Implemented V2 milestone: autonomous employee initiatives
+
+- Employees now proactively approach the leader at intervals during the 100-day career: improvement ideas, development requests, workload warnings, or challenges to decisions.
+- The type of initiative depends on the employee's fictional working style and, for workload warnings, current energy.
+- Each initiative can be addressed by listening and agreeing next steps, funding support (three in-game budget points), or postponing.
+- Unanswered requests expire after six days and have transparent, bounded effects on motivation, relationship and trust.
+- An attention card is visible while an initiative is pending; resolved outcomes are retained in game history and included in save data.
+- All 54 tests pass, including save migration and 21 simulated 100-day careers. Android web bundle preparation succeeds; physical-device QA is pending.
+
 ### P0: safety and compatibility
 
 1. Manual Android smoke test (fresh install and update): splash, full-screen layout, logo, navigation, touch and return from background.
