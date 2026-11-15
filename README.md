@@ -111,6 +111,12 @@ Byg lokalt på Windows fra projektets rod:
 
 For AAB bruges `-Platform aab`. Release-AAB kræver separat signing. Android-pakken er endnu ikke valideret på en fysisk enhed i denne udviklingssession.
 
+### Android-branding og splash
+
+Ved hvert Windows-build klargøres webindholdet, Capacitor synkroniseres, og `scripts/install-android-icon.mjs` installerer derefter `assets/leadership-icon-v2.png` som Android-launcherikon og native splash-motiv. Scriptet opdaterer også Android 12+-temaets system-splash og stopper med en fejl, hvis nødvendige Android-temaer eller billedfiler mangler.
+
+Webopstarten viser `assets/leadership-logo-v2.png` i mindst cirka 1,8 sekunder, så branding også ses på hurtige telefoner. Logoet i selve appens topbjælke bruger samme titel-logo. Hvis launcheren stadig viser det gamle ikon efter en ny APK-installation, skal den nye pakke verificeres og eventuelt installeres som en frisk installation efter sikkerhedskopiering af lokal fremgang. Android-build er fortsat ikke udført eller visuelt godkendt på en fysisk telefon her.
+
 ## V1.0 — samlet spilforløb og visuelt løft
 
 - De første 100 dage kan spilles færdige med medarbejderhandlinger, opgavestyring, syv afdelingstyper, adskillige beslutningsforløb og en slutrapport.

@@ -29,7 +29,7 @@
 </head>
 <body>
   <div id="startup-splash" role="status" aria-label="Leadership Empire starter" aria-live="polite">
-    <img src="assets/leadership-logo-v2.png" alt="Leadership Empire" width="440" height="293" onerror="this.onerror=null;this.src='assets/leadership-icon-v2.png'">
+    <img id="startup-logo" src="assets/leadership-logo-v2.png" alt="Leadership Empire" width="440" height="293" fetchpriority="high" onerror="this.onerror=null;this.src='assets/leadership-icon-v2.png'">
     <p>Forbereder din karriere</p>
   </div>
   <div class="app">
@@ -103,11 +103,15 @@
   <script src="initiatives.js"></script>
   <script src="app.js"></script>
   <script>
-    window.addEventListener('load',()=>{
-      window.setTimeout(()=>{
-        const splash=document.getElementById('startup-splash');
-        if(splash){splash.classList.add('is-ready');window.setTimeout(()=>splash.remove(),550)}
-      },650);
+    const splashStartedAt=Date.now();
+    window.addEventListener('load',async()=>{
+      const splash=document.getElementById('startup-splash');
+      if(!splash)return;
+      const logo=document.getElementById('startup-logo');
+      // Display branded artwork long enough to be perceptible even after a fast native launch.
+      if(logo&&logo.decode){try{await Promise.race([logo.decode(),new Promise(resolve=>setTimeout(resolve,1200))])}catch{}}
+      const remaining=Math.max(0,1800-(Date.now()-splashStartedAt));
+      window.setTimeout(()=>{splash.classList.add('is-ready');window.setTimeout(()=>splash.remove(),550)},remaining);
     });
   </script>
 </body>
