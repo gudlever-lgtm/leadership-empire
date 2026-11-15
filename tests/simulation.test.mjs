@@ -6,12 +6,13 @@ import {runInNewContext} from 'node:vm';
 function game(storage=new Map()){
  const elements=new Map();
  const element=id=>{if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:'',value:'',style:{},addEventListener(){},classList:{toggle(){}}});return elements.get(id)};
- const context={document:{getElementById:element,querySelectorAll(){return []}},localStorage:{getItem:key=>storage.get(key)||null,setItem:(k,v)=>storage.set(k,v)},window:{matchMedia:()=>({matches:true})},navigator:{},location:{protocol:'file:'},confirm:()=>true,alert(){},setInterval(){},console};
+ const context={document:{getElementById:element,querySelector(){return null},querySelectorAll(){return []}},localStorage:{getItem:key=>storage.get(key)||null,setItem:(k,v)=>storage.set(k,v)},window:{matchMedia:()=>({matches:true})},navigator:{},location:{protocol:'file:'},confirm:()=>true,alert(){},setInterval(){},console};
  runInNewContext(readFileSync(new URL('../engine.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../scenarios.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../crises.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../academy.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../advisors.js',import.meta.url),'utf8'),context);
+ runInNewContext(readFileSync(new URL('../performance.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../app.js',import.meta.url),'utf8'),context);
  return code=>runInNewContext(code,context);
 }
@@ -345,6 +346,55 @@ test('floating guide and both advisors are included in Android and offline build
   assert.ok(bundle.includes(file));
   assert.ok(worker.includes(file));
  }
+});
+
+test('performance center records seven appraisals by day 100 with manager and employee feedback',()=>{
+ const run=game();
+ run('applyChoice(1);applyFollowup(0)');
+ while(run('state.day')<100){if(run('state.eventOpen'))run('resolveEvent(0)');run('advance()')}
+ assert.equal(run('state.performance.reports.length'),7);
+ assert.equal(run('JSON.stringify(state.performance.reports.map(r=>r.day))'),'[15,30,45,60,75,90,100]');
+ for(const report of JSON.parse(run('JSON.stringify(state.performance.reports)'))){
+  assert.equal(report.sections.length,2);
+  assert.equal(report.sections[0].source,'Overordnet ledelse');
+  assert.equal(report.sections[1].source,'Medarbejdernes vurdering');
+  assert.ok(report.sections.every(s=>s.text.length>20&&s.recommendation.length>20));
+  assert.ok(report.overall>=0&&report.overall<=100);
+ }
+ assert.match(run('performancePanel()'),/Performance Center/);
+});
+
+test('hired JE and JM participate in later appraisals and use distinct voices',()=>{
+ const run=game();
+ run("LeadershipAdvisors.hire(state,'JE');LeadershipAdvisors.hire(state,'JM')");
+ run('applyChoice(1);applyFollowup(0)');
+ while(run('state.day')<15){if(run('state.eventOpen'))run('resolveEvent(0)');run('advance()')}
+ assert.equal(run('state.performance.reports[0].sections.length'),4);
+ assert.match(run('state.performance.reports[0].sections[2].source'),/JE/);
+ assert.match(run('state.performance.reports[0].sections[3].source'),/JM/);
+ assert.match(run("LeadershipAdvisors.advice(state,'JE')"),/JE:/);
+ assert.match(run("LeadershipAdvisors.advice(state,'JM')"),/JM:/);
+ assert.notEqual(run("LeadershipAdvisors.advice(state,'JE')"),run("LeadershipAdvisors.advice(state,'JM')"));
+});
+
+test('performance reports are persisted and legacy saves initialize safely',()=>{
+ const storage=new Map(),run=game(storage);
+ run('applyChoice(1);applyFollowup(0)');
+ while(run('state.day')<30){if(run('state.eventOpen'))run('resolveEvent(0)');run('advance()')}
+ const saved=run('JSON.stringify(state.performance)');
+ assert.equal(game(storage)('JSON.stringify(state.performance)'),saved);
+ const old=JSON.parse(storage.get('leadership-empire-prototype-v2'));delete old.performance;
+ storage.set('leadership-empire-prototype-v2',JSON.stringify(old));
+ assert.equal(game(storage)('state.performance.reports.length'),0);
+});
+
+test('performance center assets are bundled for offline and Android',()=>{
+ const root=new URL('../',import.meta.url);
+ const html=readFileSync(new URL('index.html',root),'utf8');
+ const bundle=readFileSync(new URL('scripts/prepare-android.mjs',root),'utf8');
+ const worker=readFileSync(new URL('service-worker.js',root),'utf8');
+ assert.match(html,/data-view="performance"/);
+ for(const name of ['performance.js','v12.css']){assert.ok(html.includes(name));assert.ok(bundle.includes(name));assert.ok(worker.includes(name))}
 });
 
 test('invalid save data is rejected without replacing the current game',async()=>{

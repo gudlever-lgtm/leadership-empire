@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="v07.css" />
   <link rel="stylesheet" href="v10.css" />
   <link rel="stylesheet" href="v11.css" />
+  <link rel="stylesheet" href="v12.css" />
   <style>
     #startup-splash{position:fixed;inset:0;z-index:9999;display:grid;place-content:center;justify-items:center;gap:22px;background:radial-gradient(circle at 50% 35%,#1e6761,#103d43 65%,#082830);color:#f8e8c6;transition:opacity .45s ease,visibility .45s ease}
     #startup-splash img{width:min(84vw,430px);max-height:48vh;object-fit:contain;filter:drop-shadow(0 12px 20px #0007);animation:splash-arrive .7s ease-out both}
@@ -63,6 +64,7 @@
       <button class="nav" data-view="tasks">📋<span>Opgaver</span></button>
       <button class="nav" data-view="decisions">⚖️<span>Beslutninger</span></button>
       <button class="nav" data-view="insights">📊<span>Indsigt</span></button>
+      <button class="nav" data-view="performance">🏅<span>Performance</span></button>
       <button class="nav" data-view="academy">🎓<span>Academy</span></button>
     </nav>
   </div>
@@ -93,6 +95,7 @@
   <script src="crises.js"></script>
   <script src="academy.js"></script>
   <script src="advisors.js"></script>
+  <script src="performance.js"></script>
   <script src="app.js"></script>
   <script>
     window.addEventListener('load',()=>{

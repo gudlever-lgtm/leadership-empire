@@ -31,6 +31,17 @@ Make leadership decisions matter **over time**, not just change a score immediat
 - Hires, advice history and daily request usage are persisted with the career and included in save exports.
 - Future option: a separate budget-management advisor or tool that models scenarios rather than simply printing a generic financial recommendation.
 
+## Implemented V2 milestone: Performance Center and consultant personalities
+
+- Dedicated Performance Center accessible from the bottom navigation; unread evaluations are indicated there.
+- Written appraisals on days 15, 30, 45, 60, 75, 90 and 100, with interim/termination appraisals for early dismissal.
+- Each appraisal includes distinct assessments from the immediate superior and employees, plus JE and/or JM when hired.
+- Evaluations use deterministic game metrics and include targeted recommendations, a score, a change against the previous report and saved snapshots.
+- Reports are saved with the career and included in export/import; existing V1/V2 saves without reports migrate safely.
+- JE now speaks in a concise, challenging strategic/executive voice. JM speaks in a practical, candid and people-centered voice. Their advice remains context-specific.
+- No external AI calls, real-money transactions, or claims of validated psychometric accuracy.
+- Future: follow-up commitments in Performance Center and multi-stage appraisals that react to completion of earlier recommendations.
+
 ### P0: safety and compatibility
 
 1. Manual Android smoke test (fresh install and update): splash, full-screen layout, logo, navigation, touch and return from background.
