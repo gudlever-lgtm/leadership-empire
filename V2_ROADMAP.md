@@ -21,6 +21,16 @@ Make leadership decisions matter **over time**, not just change a score immediat
 - Old V1 saves migrate without backfilling crises from days that have already passed.
 - Remaining: richer multi-stage consequences, more incident-specific choices, and physical-device QA.
 
+## Implemented V2 milestone: floating guide and management consultants
+
+- A persistent floating lightbulb opens a dismissible game guide and management consultant panel on every page.
+- JE provides top-management, strategy, governance, executive-risk and budget advice.
+- JM provides advice about the team's workload, people, trust, wellbeing and operational execution.
+- Hire JE for 12 or JM for 7 **in-game budget points**; no real-money payments or advertising.
+- Hired consultants automatically offer contextual advice every seven game days. On-demand advice is free once per consultant per game day and costs one budget point for additional same-day requests.
+- Hires, advice history and daily request usage are persisted with the career and included in save exports.
+- Future option: a separate budget-management advisor or tool that models scenarios rather than simply printing a generic financial recommendation.
+
 ### P0: safety and compatibility
 
 1. Manual Android smoke test (fresh install and update): splash, full-screen layout, logo, navigation, touch and return from background.

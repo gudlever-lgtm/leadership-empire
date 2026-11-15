@@ -11,6 +11,7 @@ function game(storage=new Map()){
  runInNewContext(readFileSync(new URL('../scenarios.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../crises.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../academy.js',import.meta.url),'utf8'),context);
+ runInNewContext(readFileSync(new URL('../advisors.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../app.js',import.meta.url),'utf8'),context);
  return code=>runInNewContext(code,context);
 }
@@ -305,6 +306,45 @@ test('authority and experience change crisis outcomes',()=>{
  for(const run of [team,executive]){run('applyChoice(1);applyFollowup(0)');while(!run('state.crisis.open')){if(run('state.eventOpen'))run('resolveEvent(0)');run('advance()')}run('resolveEvent(1)')}
  assert.ok(team('state.crisis.exposure')>executive('state.crisis.exposure'));
  assert.ok(team('state.trust')<executive('state.trust'));
+});
+
+test('JE and JM can be hired with game budget and deliver contextual advice',()=>{
+ const run=game();
+ assert.equal(run("LeadershipAdvisors.hire(state,'JE')"),true);
+ assert.equal(run('state.budget'),66);
+ assert.equal(run("LeadershipAdvisors.hire(state,'JE')"),false);
+ assert.equal(run("LeadershipAdvisors.hire(state,'JM')"),true);
+ assert.equal(run('state.budget'),59);
+ assert.equal(run("LeadershipAdvisors.request(state,'JM')"),true);
+ assert.match(run('state.advisors.messages[0].text'),/JM:/);
+ assert.equal(run("LeadershipAdvisors.request(state,'JM')"),true);
+ assert.equal(run('state.budget'),58);
+});
+
+test('advisors generate weekly advice and survive save/resume',()=>{
+ const storage=new Map(),run=game(storage);
+ run("LeadershipAdvisors.hire(state,'JE');LeadershipAdvisors.hire(state,'JM');save()");
+ run('applyChoice(1);applyFollowup(0)');
+ while(run('state.day')<14){if(run('state.eventOpen'))run('resolveEvent(0)');run('advance()')}
+ assert.equal(run('state.advisors.autoDay'),14);
+ assert.equal(run('state.advisors.messages.filter(m=>m.kind==="advice").length'),4);
+ const saved=run('JSON.stringify(state.advisors)');
+ const resumed=game(storage);
+ assert.equal(resumed('JSON.stringify(state.advisors)'),saved);
+});
+
+test('floating guide and both advisors are included in Android and offline builds',()=>{
+ const root=new URL('../',import.meta.url);
+ const html=readFileSync(new URL('index.html',root),'utf8');
+ const bundle=readFileSync(new URL('scripts/prepare-android.mjs',root),'utf8');
+ const worker=readFileSync(new URL('service-worker.js',root),'utf8');
+ assert.match(html,/id="guide-fab"/);
+ assert.match(html,/id="guide-dialog"/);
+ for(const file of ['advisors.js','v11.css']){
+  assert.match(html,new RegExp(file.replace('.','\\.')));
+  assert.ok(bundle.includes(file));
+  assert.ok(worker.includes(file));
+ }
 });
 
 test('invalid save data is rejected without replacing the current game',async()=>{

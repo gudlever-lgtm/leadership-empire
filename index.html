@@ -15,6 +15,7 @@
   <link rel="stylesheet" href="v05.css" />
   <link rel="stylesheet" href="v07.css" />
   <link rel="stylesheet" href="v10.css" />
+  <link rel="stylesheet" href="v11.css" />
   <style>
     #startup-splash{position:fixed;inset:0;z-index:9999;display:grid;place-content:center;justify-items:center;gap:22px;background:radial-gradient(circle at 50% 35%,#1e6761,#103d43 65%,#082830);color:#f8e8c6;transition:opacity .45s ease,visibility .45s ease}
     #startup-splash img{width:min(84vw,430px);max-height:48vh;object-fit:contain;filter:drop-shadow(0 12px 20px #0007);animation:splash-arrive .7s ease-out both}
@@ -65,6 +66,12 @@
       <button class="nav" data-view="academy">🎓<span>Academy</span></button>
     </nav>
   </div>
+  <button id="guide-fab" class="guide-fab" type="button" aria-label="Åbn spilguide og managementkonsulenter" aria-haspopup="dialog" aria-controls="guide-dialog" title="Guide & rådgivere">💡<span id="guide-badge" class="guide-badge" hidden>●</span></button>
+  <dialog id="guide-dialog" class="guide-dialog" aria-labelledby="guide-title">
+    <div class="guide-head"><div><span class="panel-tag">LEADERSHIP EMPIRE</span><h2 id="guide-title">Spilguide & rådgivere</h2></div><button id="guide-close" class="guide-close" type="button" aria-label="Luk guide">✕</button></div>
+    <div class="guide-tabs"><button type="button" class="guide-tab active" data-guide-tab="help">📖 Guide</button><button type="button" class="guide-tab" data-guide-tab="advisors">🧠 Konsulenter</button></div>
+    <div id="guide-content"></div>
+  </dialog>
   <dialog id="career-dialog" class="career-dialog" aria-labelledby="career-title">
     <form method="dialog" id="career-form">
       <div class="panel-tag">Leadership Empire</div>
@@ -85,6 +92,7 @@
   <script src="scenarios.js"></script>
   <script src="crises.js"></script>
   <script src="academy.js"></script>
+  <script src="advisors.js"></script>
   <script src="app.js"></script>
   <script>
     window.addEventListener('load',()=>{
