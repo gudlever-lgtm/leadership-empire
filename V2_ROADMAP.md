@@ -63,6 +63,16 @@ Make leadership decisions matter **over time**, not just change a score immediat
 - 46 automated tests now pass; 21 full careers finish with all three threads closed, and Android web asset preparation succeeds.
 - Future: additional department-specific threads, longer interdepartmental dependencies, and more nuanced feedback based on team members rather than fixed scenario scripts.
 
+## Implemented V2 milestone: individual employee preferences
+
+- All twelve fictional employees have distinct working styles, needs and experience levels.
+- Employee dialogue, training and workload relief now produce different motivation and relationship responses depending on the employee's profile and relationship with the manager.
+- Regular scenario decisions also trigger individual reactions from the directly affected employees.
+- The People panel shows each employee's working style, needs and latest reaction, making previously hidden effects easier to understand.
+- The last 80 reactions are persisted with save exports, and old saves receive a safe empty history.
+- The mechanic is deterministic and deliberately simplified; profiles are fictional game preferences, **not** psychological diagnoses or employee personality assessments.
+- 50 automated tests cover the current game, including 21 complete 100-day careers. Native Android device QA is still outstanding.
+
 ### P0: safety and compatibility
 
 1. Manual Android smoke test (fresh install and update): splash, full-screen layout, logo, navigation, touch and return from background.

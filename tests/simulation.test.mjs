@@ -15,6 +15,7 @@ function game(storage=new Map()){
  runInNewContext(readFileSync(new URL('../performance.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../learning.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../consequences.js',import.meta.url),'utf8'),context);
+ runInNewContext(readFileSync(new URL('../personalities.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../app.js',import.meta.url),'utf8'),context);
  return code=>runInNewContext(code,context);
 }
@@ -129,6 +130,42 @@ test('V2 consequence engine is in offline and Android assets',()=>{
  }
 });
 
+test('V2 employees have twelve distinct fictional styles and needs',()=>{
+ const run=game();
+ assert.equal(run('LeadershipPersonalities.PROFILES.length'),12);
+ assert.equal(run('new Set(LeadershipPersonalities.PROFILES.map(p=>p.style)).size'),12);
+ assert.notEqual(run('LeadershipPersonalities.personality(0).need'),run('LeadershipPersonalities.personality(3).need'));
+ assert.match(run('state.view="people";state.selected=0;panel()'),/Arbejdsstil/);
+});
+
+test('V2 same leadership action creates different reactions by employee',()=>{
+ const run=game();
+ const a=run('LeadershipPersonalities.respond(state,0,"talk").delta');
+ const b=run('LeadershipPersonalities.respond(state,1,"talk").delta');
+ assert.notEqual(a,b);
+ assert.equal(run('state.peopleDynamics.reactions.length'),2);
+ run('save()');
+});
+
+test('V2 a decision changes affected employees and persists their reactions',()=>{
+ const storage=new Map(),run=game(storage);
+ run('applyChoice(1);applyFollowup(0)');
+ for(let i=1;i<15;i++)run('advance()');
+ run('resolveEvent(0)');
+ assert.equal(run('state.peopleDynamics.reactions.length'),2);
+ assert.equal(run('state.peopleDynamics.reactions[0].kind'),'decision');
+ const resumed=game(storage);
+ assert.equal(resumed('state.peopleDynamics.reactions.length'),2);
+ run('delete state.peopleDynamics;save()');
+ assert.equal(game(storage)('state.peopleDynamics.reactions.length'),0);
+});
+
+test('V2 personalities are included in offline Android packaging',()=>{
+ for(const file of ['index.html','service-worker.js','scripts/prepare-android.mjs']){
+  assert.match(readFileSync(new URL('../'+file,import.meta.url),'utf8'),/personalities\.js/);
+ }
+});
+
 test('new dilemmas emerge after day fourteen and alter relations',()=>{
  const run=game();
  run('applyChoice(1);applyFollowup(0)');
@@ -138,7 +175,7 @@ test('new dilemmas emerge after day fourteen and alter relations',()=>{
  assert.equal(run('state.eventOpen'),true);
  const before=run('state.relations[1]');
  run('resolveEvent(0)');
- assert.equal(run('state.relations[1]'),before+7);
+ assert.equal(run('state.relations[1]'),before+9); // Dialogue + Maria's distinct response.
  assert.equal(run('state.eventIndex'),1);
  assert.equal(run('state.eventOpen'),false);
 });
