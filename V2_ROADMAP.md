@@ -42,6 +42,16 @@ Make leadership decisions matter **over time**, not just change a score immediat
 - No external AI calls, real-money transactions, or claims of validated psychometric accuracy.
 - Future: follow-up commitments in Performance Center and multi-stage appraisals that react to completion of earlier recommendations.
 
+## Implemented V2 milestone: Leadership Learning
+
+- Ten optional Academy modules with scenario choices, explanations and a written reflection (the original three include direct research references; the seven new exercises are game-authored).
+- Contextual, dismissible learning moments after leadership choices and crises, each with a concise principle and reflection question.
+- Ten simulated leadership-competence practice indicators; decisions, reflections and first-time module completions contribute bounded progress points. **These are not certified skills or an assessment of real management ability.**
+- A personal development plan in Performance Center: after a review, select 1–3 measurable goals. They are assessed as achieved or not achieved at the next scheduled review.
+- Learning state is saved offline, included in career export/import, and migrated when older career saves are loaded.
+- 42 automated tests pass, including learning workflows and 21 deterministic 100-day regression careers. Android web assets bundle successfully; device UI testing remains pending.
+- Future: targeted advisor coaching attached to individual development goals, stronger pedagogical source references for the seven newer modules, and long-term consequence feedback.
+
 ### P0: safety and compatibility
 
 1. Manual Android smoke test (fresh install and update): splash, full-screen layout, logo, navigation, touch and return from background.

@@ -35,7 +35,9 @@
   for(const id of state.advisors?.hired||[])sections.push(consultant(state,id,s,id==='JE'?executiveScore:peopleScore));
   const overall=clip((executiveScore+peopleScore)/2);
   const previous=state.performance.reports.at(-1);
-  state.performance.reports.push({day:state.day,overall,rating:rating(overall),change:previous?overall-previous.overall:null,metrics:s,sections,termination:!!state.crisis?.fired});
+  const report={day:state.day,overall,rating:rating(overall),change:previous?overall-previous.overall:null,metrics:s,sections,termination:!!state.crisis?.fired};
+  state.performance.reports.push(report);
+  if(global.LeadershipLearning&&state.learning)global.LeadershipLearning.evaluate(state,report);
   state.performance.lastDay=state.day;
   return true;
  }

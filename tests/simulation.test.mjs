@@ -13,6 +13,7 @@ function game(storage=new Map()){
  runInNewContext(readFileSync(new URL('../academy.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../advisors.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../performance.js',import.meta.url),'utf8'),context);
+ runInNewContext(readFileSync(new URL('../learning.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../app.js',import.meta.url),'utf8'),context);
  return code=>runInNewContext(code,context);
 }
@@ -26,6 +27,60 @@ test('first dialogue changes trust and advances stage',()=>{
  run('applyFollowup(0)');
  assert.equal(run('state.stage'),2);
  assert.equal(run('state.budget'),74);
+});
+
+test('V2 learning moments are voluntary, reflect on choices and persist across reload',()=>{
+ const storage=new Map(),run=game(storage);
+ run('applyChoice(1)');
+ assert.equal(run('state.learning.current.topic'),'communication');
+ assert.match(run('learningMomentHTML()'),/Tydelig kommunikation/);
+ assert.equal(run('LeadershipLearning.reflect(state,"Jeg vil spørge ind til baggrunden først.")'),true);
+ assert.equal(run('state.learning.competence.communication'),24);
+ assert.equal(run('state.learning.current'),null);
+ run('save()');
+ const resumed=game(storage);
+ assert.equal(resumed('state.learning.reflections.length'),1);
+ assert.equal(resumed('state.learning.competence.communication'),24);
+ resumed('applyFollowup(0)');
+ assert.equal(resumed('state.learning.current.topic'),'coaching');
+ resumed('LeadershipLearning.dismiss(state)');
+ assert.equal(resumed('state.learning.current'),null);
+});
+
+test('V2 Academy has ten playable modules and credits completion once',()=>{
+ const run=game();
+ assert.equal(run('LeadershipAcademy.modules.length'),10);
+ run('academySelect(9);academyAnswer(0)');
+ assert.match(run('academyPanel()'),/Ledelse af ledere/);
+ assert.equal(run('state.academy.selected'),9);
+ const before=run('state.learning.competence.executive');
+ run('document.getElementById("reflection").value="Jeg vil lade lokale ledere træffe deres egne beslutninger.";academySave()');
+ assert.equal(run('state.learning.competence.executive'),before+5);
+ run('academySave()');
+ assert.equal(run('state.learning.competence.executive'),before+5);
+});
+
+test('V2 development plan is evaluated at next performance review',()=>{
+ const run=game();
+ run('applyChoice(1);applyFollowup(0)');
+ for(let i=1;i<15;i++)run('advance()');
+ assert.equal(run('state.performance.reports[0].day'),15);
+ assert.equal(run('LeadershipLearning.openPlan(state,15,["trust","wellbeing"])'),true);
+ assert.equal(run('LeadershipLearning.openPlan(state,15,["budget"])'),false);
+ assert.equal(run('LeadershipLearning.openPlan(state,15,[])'),false);
+ assert.match(run('developmentPlanHTML()'),/Din personlige udviklingsplan/);
+ run('state.world.metrics.trust=100;state.world.metrics.wellbeing=0;state.day=30;state.world.day=30;LeadershipPerformance.record(state)');
+ assert.equal(run('state.learning.plans[0].goals[0].status'),'achieved');
+ assert.equal(run('state.learning.plans[0].goals[1].status'),'not-achieved');
+});
+
+test('V2 learning assets are packaged for PWA and Android',()=>{
+ const html=readFileSync(new URL('../index.html',import.meta.url),'utf8');
+ const sw=readFileSync(new URL('../service-worker.js',import.meta.url),'utf8');
+ const android=readFileSync(new URL('../scripts/prepare-android.mjs',import.meta.url),'utf8');
+ for(const file of ['learning.js','v13.css']){
+  assert.ok(html.includes(file));assert.ok(sw.includes(file));assert.ok(android.includes(file));
+ }
 });
 
 test('new dilemmas emerge after day fourteen and alter relations',()=>{
@@ -133,7 +188,7 @@ test('full hundred days plays through many decisions without exhausted cases',()
 
 test('academy offers three complete modules and preserves reflection',()=>{
  const run=game();
- assert.equal(run('LeadershipAcademy.modules.length'),3);
+ assert.equal(run('LeadershipAcademy.modules.length'),10);
  run("academySelect(1);academyAnswer(0);document.getElementById('reflection').value='Jeg ville aftale opfølgning efter to uger.';academySave()");
  assert.equal(run('state.academy.completed.length'),1);
  assert.equal(run('state.academy.selected'),1);
