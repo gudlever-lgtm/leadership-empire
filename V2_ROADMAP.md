@@ -52,6 +52,17 @@ Make leadership decisions matter **over time**, not just change a score immediat
 - 42 automated tests pass, including learning workflows and 21 deterministic 100-day regression careers. Android web assets bundle successfully; device UI testing remains pending.
 - Future: targeted advisor coaching attached to individual development goals, stronger pedagogical source references for the seven newer modules, and long-term consequence feedback.
 
+## Implemented V2 milestone: delayed consequences and recovery
+
+- Three multi-day case threads follow the player's first conflict, workload and change-management dilemmas.
+- Each thread creates a four-day employee feedback checkpoint and an eleven-day resolution; the initial choice and any follow-up influence the outcome.
+- Three voluntary responses at the checkpoint: follow up through dialogue, involve extra help at a cost of three in-game budget points, or wait.
+- Follow-up messages and measurable changes to trust, wellbeing or delivery are preserved in the career save, decisions view and insights view.
+- Subsequent Performance Center reviews mention recent cases and whether the player acted on employee feedback.
+- Old saves initialize with an empty consequences timeline, avoiding retroactive penalties.
+- 46 automated tests now pass; 21 full careers finish with all three threads closed, and Android web asset preparation succeeds.
+- Future: additional department-specific threads, longer interdepartmental dependencies, and more nuanced feedback based on team members rather than fixed scenario scripts.
+
 ### P0: safety and compatibility
 
 1. Manual Android smoke test (fresh install and update): splash, full-screen layout, logo, navigation, touch and return from background.

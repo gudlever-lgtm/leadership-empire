@@ -14,6 +14,7 @@ function game(storage=new Map()){
  runInNewContext(readFileSync(new URL('../advisors.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../performance.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../learning.js',import.meta.url),'utf8'),context);
+ runInNewContext(readFileSync(new URL('../consequences.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../app.js',import.meta.url),'utf8'),context);
  return code=>runInNewContext(code,context);
 }
@@ -80,6 +81,51 @@ test('V2 learning assets are packaged for PWA and Android',()=>{
  const android=readFileSync(new URL('../scripts/prepare-android.mjs',import.meta.url),'utf8');
  for(const file of ['learning.js','v13.css']){
   assert.ok(html.includes(file));assert.ok(sw.includes(file));assert.ok(android.includes(file));
+ }
+});
+
+test('V2 consequences open on a decision, update after four days and close after eleven',()=>{
+ const run=game();run('applyChoice(1);applyFollowup(0)');
+ for(let i=1;i<15;i++)run('advance()');
+ run('resolveEvent(0)');
+ assert.equal(run('state.consequences.threads.length'),1);
+ assert.equal(run('state.consequences.threads[0].status'),'monitoring');
+ for(let i=0;i<4;i++)run('advance()');
+ assert.equal(run('state.consequences.threads[0].status'),'awaiting');
+ assert.match(run('consequencesHTML()'),/Følg op i dialog/);
+ assert.equal(run('LeadershipConsequences.respond(state,1,"dialog")'),true);
+ assert.equal(run('LeadershipConsequences.respond(state,1,"dialog")'),false);
+ for(let i=0;i<7;i++){
+  if(run('state.eventOpen'))run('resolveEvent(0)');
+  run('advance()');
+ }
+ assert.equal(run('state.consequences.threads[0].status'),'closed');
+ assert.equal(run('state.consequences.threads[0].outcome.delta'),6);
+ assert.equal(run('state.consequences.updates.filter(x=>x.threadId===1).length'),3);
+});
+
+test('V2 follow-up choice has a measured cost and an alternative outcome',()=>{
+ const run=game();
+ run('LeadershipConsequences.start(state,"workload",1,"Højt arbejdspres");state.day=5;state.world.day=5;LeadershipConsequences.tick(state)');
+ const before=run('state.budget');
+ assert.equal(run('LeadershipConsequences.respond(state,1,"escalate")'),true);
+ assert.equal(run('state.budget'),before-3);
+ run('state.day=12;state.world.day=12;LeadershipConsequences.tick(state)');
+ assert.equal(run('state.consequences.threads[0].outcome.delta'),-1);
+ assert.equal(run('state.consequences.threads[0].status'),'closed');
+});
+
+test('V2 consequence threads persist and legacy saves migrate',()=>{
+ const storage=new Map(),run=game(storage);
+ run('LeadershipConsequences.start(state,"change",0,"Pilotprojekt");save()');
+ assert.equal(game(storage)('state.consequences.threads[0].type'),'change');
+ run('delete state.consequences;save()');
+ assert.equal(game(storage)('state.consequences.threads.length'),0);
+});
+
+test('V2 consequence engine is in offline and Android assets',()=>{
+ for(const file of ['index.html','service-worker.js','scripts/prepare-android.mjs']){
+  assert.match(readFileSync(new URL('../'+file,import.meta.url),'utf8'),/consequences\.js/);
  }
 });
 
@@ -293,6 +339,8 @@ test('100-day regression: 21 careers retain progress, metrics and deterministic 
   if(run('state.eventOpen'))run('resolveEvent(1)');
   assert.equal(run('state.day'),100);
   assert.ok(run('state.world.completed')>0);
+  assert.equal(run('state.consequences.threads.length'),3,`${department}/${org}: expected three long-term cases`);
+  assert.ok(run('state.consequences.threads.every(t=>t.status==="closed"&&t.outcome)'),`${department}/${org}: unresolved follow-up`);
   assert.match(run('finalReport()'),/100 dage gennemført/);
   const saved=run('JSON.stringify(state)');
   const resumed=game(storage);

@@ -32,6 +32,15 @@
   }
   const s=measure(state),executiveScore=clip((s.delivery+s.quality+s.budget+s.trust)/4),peopleScore=clip((s.trust+s.wellbeing+s.motivation)/3);
   const sections=[manager(s,executiveScore),employees(s,peopleScore)];
+  const threads=state.consequences?.threads||[];
+  const recent=threads.filter(t=>t.start<=state.day&&t.start>=state.day-25);
+  if(recent.length){
+   const awaiting=recent.filter(t=>t.status==='awaiting').length;
+   const followed=recent.filter(t=>t.response==='dialog'||t.response==='escalate').length;
+   sections[0].text+=` ${recent.length} ledelsessager følges over flere dage; ${awaiting} afventer din opfølgning.`;
+   sections[0].recommendation+=awaiting?' Prioritér de åbne opfølgningssager.':' Dokumentér hvordan tidligere beslutninger har udviklet sig.';
+   sections[1].text+=` Medarbejderne har fået opfølgning i ${followed} af de nylige sager.`;
+  }
   for(const id of state.advisors?.hired||[])sections.push(consultant(state,id,s,id==='JE'?executiveScore:peopleScore));
   const overall=clip((executiveScore+peopleScore)/2);
   const previous=state.performance.reports.at(-1);
