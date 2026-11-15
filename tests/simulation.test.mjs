@@ -9,6 +9,7 @@ function game(storage=new Map()){
  const context={document:{getElementById:element,querySelectorAll(){return []}},localStorage:{getItem:key=>storage.get(key)||null,setItem:(k,v)=>storage.set(k,v)},window:{matchMedia:()=>({matches:true})},navigator:{},location:{protocol:'file:'},confirm:()=>true,alert(){},setInterval(){},console};
  runInNewContext(readFileSync(new URL('../engine.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../scenarios.js',import.meta.url),'utf8'),context);
+ runInNewContext(readFileSync(new URL('../crises.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../academy.js',import.meta.url),'utf8'),context);
  runInNewContext(readFileSync(new URL('../app.js',import.meta.url),'utf8'),context);
  return code=>runInNewContext(code,context);
@@ -83,7 +84,7 @@ test('unsupported department is rejected without replacing the game',()=>{
 
 test('work engine advances tasks reproducibly and closes at day 100',()=>{
  const a=game(),b=game();
- for(let i=0;i<99;i++){a('advance()');b('advance()')}
+ while(a('state.day')<100){if(a('state.eventOpen')){a('resolveEvent(0)');b('resolveEvent(0)')}a('advance()');b('advance()')}
  assert.equal(a('state.day'),100);
  assert.equal(a('state.world.day'),100);
  assert.ok(a('state.world.completed')>0);
@@ -256,6 +257,56 @@ test('branded loading screen is shipped with the Android web bundle',()=>{
  assert.match(bundle,/cpSync\(join\(root,'assets'\)/);
 });
 
+test('configurable crises: 4 and 10 events with persisted leadership settings',()=>{
+ for(const count of [4,10]){
+  const storage=new Map(),run=game(storage);
+  assert.equal(run(`startCareer({org:'public',size:'medium',department:'hr',position:'executive',experience:'veteran',risk:'cautious',incidentCount:${count},accountability:'off'})`),true);
+  run('applyChoice(1);applyFollowup(0)');
+  while(run('state.day')<100){if(run('state.eventOpen'))run('resolveEvent(0)');run('advance()')}
+  if(run('state.eventOpen'))run('resolveEvent(0)');
+  assert.equal(run('state.crisis.resolved.length'),count);
+  assert.equal(run('state.crisis.fired'),false);
+  const resumed=game(storage);
+  assert.equal(resumed('state.config.position'),'executive');
+  assert.equal(resumed('state.config.incidentCount'),count);
+  assert.equal(resumed('state.crisis.resolved.length'),count);
+ }
+});
+
+test('repeated reckless crisis handling can fire the leader and stop the career',()=>{
+ const run=game();
+ run("startCareer({org:'private',size:'medium',department:'it',position:'team',experience:'new',risk:'bold',incidentCount:10,accountability:'strict'})");
+ run('applyChoice(1);applyFollowup(0)');
+ while(run('state.day')<100&&!run('state.crisis.fired')){
+  if(run('state.eventOpen'))run('resolveEvent(state.crisis.open?2:0)');
+  if(!run('state.crisis.fired'))run('advance()');
+ }
+ assert.equal(run('state.crisis.fired'),true);
+ assert.ok(run('state.day')<100);
+ assert.match(run('finalReport()'),/F\*CKING FYRET/);
+ const before=run('state.day');run('advance()');assert.equal(run('state.day'),before);
+});
+
+test('V1 saves migrate without replaying crises from earlier days',()=>{
+ const storage=new Map(),run=game(storage);
+ run('applyChoice(1);applyFollowup(0)');
+ while(run('state.day')<60){if(run('state.eventOpen'))run('resolveEvent(0)');run('advance()')}
+ const old=JSON.parse(storage.get('leadership-empire-prototype-v2'));delete old.crisis;
+ storage.set('leadership-empire-prototype-v2',JSON.stringify(old));
+ const resumed=game(storage);
+ assert.equal(resumed('state.day'),60);
+ assert.equal(resumed('state.crisis.schedule[state.crisis.cursor].day')>60,true);
+});
+
+test('authority and experience change crisis outcomes',()=>{
+ const team=game(),executive=game();
+ team("startCareer({org:'public',size:'medium',department:'it',position:'team',experience:'new',risk:'balanced',incidentCount:4,accountability:'normal'})");
+ executive("startCareer({org:'public',size:'medium',department:'it',position:'executive',experience:'veteran',risk:'balanced',incidentCount:4,accountability:'normal'})");
+ for(const run of [team,executive]){run('applyChoice(1);applyFollowup(0)');while(!run('state.crisis.open')){if(run('state.eventOpen'))run('resolveEvent(0)');run('advance()')}run('resolveEvent(1)')}
+ assert.ok(team('state.crisis.exposure')>executive('state.crisis.exposure'));
+ assert.ok(team('state.trust')<executive('state.trust'));
+});
+
 test('invalid save data is rejected without replacing the current game',async()=>{
  const run=game();
  const data=JSON.parse(run('JSON.stringify({format:"leadership-empire-save",version:1,game:state})'));
@@ -278,7 +329,7 @@ test('v1 graphical assets are present and included in offline/android package',(
  assert.match(html,/v10\.css/);
  assert.match(stylesheet,/character-sprite/);
  assert.match(script,/v10\.css/);
- assert.match(worker,/leadership-empire-v1\.0/);
+ assert.match(worker,/leadership-empire-v(?:1\.0|2)/);
 });
 
 test('Windows APK target and standalone website card are configured',()=>{

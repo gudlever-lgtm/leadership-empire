@@ -73,11 +73,17 @@
       <label>Organisationstype<select id="org-type"><option value="public">Offentlig organisation</option><option value="private">Privat virksomhed</option><option value="ngo">NGO</option></select></label>
       <label>Organisationsstørrelse<select id="org-size"><option value="small">Lille (op til 50 ansatte)</option><option value="medium">Mellemstor (51–250 ansatte)</option><option value="large">Stor (over 250 ansatte)</option></select></label>
       <label>Afdelingstype<select id="department-type"><option value="it">IT & Infrastruktur</option><option value="software">Softwareudvikling</option><option value="hr">HR & Personale</option><option value="finance">Økonomi</option><option value="support">Kundeservice</option><option value="production">Produktion</option><option value="administration">Administration</option></select></label>
+      <label>Organisatorisk placering<select id="position-type"><option value="team">Teamleder</option><option value="department">Afdelingschef</option><option value="executive">Direktion</option></select></label>
+      <label>Ledererfaring<select id="experience-type"><option value="new">Ny leder</option><option value="experienced">Erfaren leder</option><option value="veteran">Rutineret leder</option></select></label>
+      <label>Risikovillighed<select id="risk-type"><option value="cautious">Forsigtig</option><option value="balanced">Afbalanceret</option><option value="bold">Risikovillig</option></select></label>
+      <label>Uforudsete hændelser på 100 dage<select id="incident-count"><option value="4">4 hændelser</option><option value="5">5 hændelser</option><option value="6" selected>6 hændelser</option><option value="7">7 hændelser</option><option value="8">8 hændelser</option><option value="9">9 hændelser</option><option value="10">10 hændelser</option></select></label>
+      <label>Risiko for at blive fyret<select id="accountability-type"><option value="off">Deaktiveret</option><option value="gentle">Tilgivende</option><option value="normal" selected>Normal</option><option value="strict">Hård ledelse</option></select></label>
       <div class="dialog-actions"><button value="cancel" class="btn secondary">Annuller</button><button value="start" class="btn primary">Start karriere →</button></div>
     </form>
   </dialog>
   <script src="engine.js"></script>
   <script src="scenarios.js"></script>
+  <script src="crises.js"></script>
   <script src="academy.js"></script>
   <script src="app.js"></script>
   <script>

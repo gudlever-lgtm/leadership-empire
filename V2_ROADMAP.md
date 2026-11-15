@@ -12,6 +12,15 @@
 
 Make leadership decisions matter **over time**, not just change a score immediately. Preserve offline play, Android compatibility, accessible touch controls and existing saves.
 
+## Implemented V2 milestone: unforeseen incidents
+
+- New career setup includes organizational level (team/department/executive), leadership experience, risk appetite, incident frequency (4–10) and accountability (off/gentle/normal/strict).
+- Crisis engine schedules organization-wide, cross-departmental and departmental incidents across the first 100 days.
+- Choices have explicit trade-offs; decisions outside a team leader's authority create additional exposure.
+- Reckless repeated decisions may end the career with the deliberately irreverent **“DU ER F*CKING FYRET!”** result and a stated reason. Firing can be disabled at career creation.
+- Old V1 saves migrate without backfilling crises from days that have already passed.
+- Remaining: richer multi-stage consequences, more incident-specific choices, and physical-device QA.
+
 ### P0: safety and compatibility
 
 1. Manual Android smoke test (fresh install and update): splash, full-screen layout, logo, navigation, touch and return from background.
