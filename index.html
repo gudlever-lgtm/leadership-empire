@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="v11.css" />
   <link rel="stylesheet" href="v12.css" />
   <link rel="stylesheet" href="v13.css" />
+  <link rel="stylesheet" href="v20.css" />
   <style>
     #startup-splash{position:fixed;inset:0;z-index:9999;display:grid;place-content:center;justify-items:center;gap:22px;background:radial-gradient(circle at 50% 35%,#1e6761,#103d43 65%,#082830);color:#f8e8c6;transition:opacity .45s ease,visibility .45s ease}
     #startup-splash img{width:min(84vw,430px);max-height:48vh;object-fit:contain;filter:drop-shadow(0 12px 20px #0007);animation:splash-arrive .7s ease-out both}
@@ -60,13 +61,13 @@
       </div>
     </main>
     <nav class="bottom-nav" aria-label="Hovedmenu">
-      <button class="nav active" data-view="organisation">🏢<span>Organisation</span></button>
-      <button class="nav" data-view="people">👥<span>Medarbejdere</span></button>
-      <button class="nav" data-view="tasks">📋<span>Opgaver</span></button>
-      <button class="nav" data-view="decisions">⚖️<span>Beslutninger</span></button>
-      <button class="nav" data-view="insights">📊<span>Indsigt</span></button>
-      <button class="nav" data-view="performance">🏅<span>Performance</span></button>
-      <button class="nav" data-view="academy">🎓<span>Academy</span></button>
+      <button class="nav active" data-view="organisation"><span class="nav-icon" aria-hidden="true">⌂</span><span>Afdeling</span></button>
+      <button class="nav" data-view="people"><span class="nav-icon" aria-hidden="true">♙</span><span>Personer</span></button>
+      <button class="nav" data-view="tasks"><span class="nav-icon" aria-hidden="true">☷</span><span>Opgaver</span></button>
+      <button class="nav" data-view="decisions"><span class="nav-icon" aria-hidden="true">⚖</span><span>Valg</span></button>
+      <button class="nav" data-view="insights"><span class="nav-icon" aria-hidden="true">▥</span><span>Indsigt</span></button>
+      <button class="nav" data-view="performance"><span class="nav-icon" aria-hidden="true">◈</span><span>Performance</span></button>
+      <button class="nav" data-view="academy"><span class="nav-icon" aria-hidden="true">✧</span><span>Academy</span></button>
     </nav>
   </div>
   <button id="guide-fab" class="guide-fab" type="button" aria-label="Åbn spilguide og managementkonsulenter" aria-haspopup="dialog" aria-controls="guide-dialog" title="Guide & rådgivere">💡<span id="guide-badge" class="guide-badge" hidden>●</span></button>

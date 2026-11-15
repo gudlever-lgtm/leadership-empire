@@ -1,5 +1,17 @@
 # Leadership Empire — V2.0 roadmap
 
+## Visual Experience V2.1–V2.7 — implemented in source (15 November 2026)
+
+- **V2.1 Employees:** twelve visually unique, fixed-position character portraits in a compressed 4×3 WebP atlas. Existing V1 full-body office sprites remain as simple walking silhouettes, while the distinctive portraits identify each person in the office and employee panel. Energy-based visual status is displayed.
+- **V2.2 Consultants:** JE and JM have different cinematic portraits in their hire/advice cards, including message history.
+- **V2.3 Incidents:** organizational crises and other dilemmas use a narrative boardroom illustration and visible crisis styling on the office scene. The same key art is intentionally reused in this first visual release; incident-specific artwork remains a possible later expansion.
+- **V2.4 Visual system:** shared teal/gold panel accents, custom compact navigation symbols and readable mobile labels; retains the accepted premium V1 logo.
+- **V2.5 Office atmosphere:** existing idle and route animations retained, with status portrait indicators and crisis-state feedback. These are illustrative movements, not a full character-animation engine.
+- **V2.6 Performance Center:** responsive SVG score progression chart, with marked review points and text equivalents, built from saved performance appraisals.
+- **V2.7 Career finale:** cinematic end-of-career illustration and animated termination/100-day result states, respecting reduced-motion settings.
+- **Packaging and branding:** `v20.css` and the three compressed visual assets are cached for offline play and copied to the Android web bundle. V1 logo remains in the app header and web splash; Android icon/native splash installation remains part of the build script.
+- **Verification:** 57 Node tests pass, including full 100-day simulation and visual asset packaging checks. A physical Android visual and launcher/splash check is **not** yet complete; no APK was built as part of this milestone.
+
 ## V1 baseline (accepted 2026-11-14)
 
 - Layout and premium logo are accepted as V1; avoid a broad visual redesign.

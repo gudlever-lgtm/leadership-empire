@@ -37,3 +37,27 @@ test('web startup holds the real premium logo while the application loads',()=>{
  assert.match(html,/id="startup-logo"[^>]*leadership-logo-v2\.png/);
  assert.match(html,/1800-\(Date\.now\(\)-splashStartedAt\)/);
 });
+
+test('Visual V2.7 portraits, advisors, crisis art and branding are included in offline and Android',()=>{
+ const root=new URL('../',import.meta.url);
+ const html=readFileSync(new URL('index.html',root),'utf8');
+ const css=readFileSync(new URL('v20.css',root),'utf8');
+ const worker=readFileSync(new URL('service-worker.js',root),'utf8');
+ const android=readFileSync(new URL('scripts/prepare-android.mjs',root),'utf8');
+ const js=readFileSync(new URL('app.js',root),'utf8');
+ const files=['people-portraits-v2.webp','advisors-v2.webp','crisis-boardroom-v2.webp'];
+ assert.match(html,/href="v20\.css"/);
+ assert.match(html,/id="startup-logo"[^>]*leadership-logo-v2\.png/);
+ assert.match(html,/class="brand-logo"[^>]*leadership-logo-v2\.png/);
+ assert.match(android,/'v20\.css'/);
+ assert.match(worker,/'\.\/v20\.css'/);
+ for(const file of files){
+  assert.ok(existsSync(new URL('assets/'+file,root)),`${file} missing`);
+  assert.ok(css.includes(file),`${file} not referenced by CSS`);
+  assert.ok(worker.includes(file),`${file} not cached for offline play`);
+ }
+ assert.match(js,/function portraitHTML\(/);
+ assert.match(js,/function advisorPortraitHTML\(/);
+ assert.match(js,/function crisisArtHTML\(/);
+ assert.match(js,/function performanceChart\(/);
+});
